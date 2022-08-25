@@ -16,10 +16,9 @@ citation:
   container-title: "Midterm seminar report"
   #citation_technical_report_institution: Lund University
   #doi: "10.23915/reprodocs.00010"
-  #url: https://dmi3kno.github.io/LU-midterm/midterm-seminar-proposal.html
-  #keywords: bayesian, statistics, citations
-  #issued: 2022-08-25
-  #available-date: 2022-08-25
+  url: https://dmi3kno.github.io/LU-midterm/midterm-seminar-proposal.html
+  issued: 2022-08-25
+  available-date: 2022-08-25
   #pdf-url: https://github.com/dmi3kno/LU-midterm/
   language: en
   #issue: 1
