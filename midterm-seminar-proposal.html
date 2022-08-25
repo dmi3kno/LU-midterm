@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-99.9.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dmytro Perepolkin">
+<meta name="dcterms.date" content="2022-08-25">
+<meta name="keywords" content="bayesian inference, quantile functions">
+<meta name="description" content="A proposal document for midterm seminar.">
+
+<title>Statistical models for expert judgment in environmental decision making</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: 1;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="midterm-seminar-proposal_files/libs/clipboard/clipboard.min.js"></script>
+<script src="midterm-seminar-proposal_files/libs/quarto-html/quarto.js"></script>
+<script src="midterm-seminar-proposal_files/libs/quarto-html/popper.min.js"></script>
+<script src="midterm-seminar-proposal_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="midterm-seminar-proposal_files/libs/quarto-html/anchor.min.js"></script>
+<link href="midterm-seminar-proposal_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="midterm-seminar-proposal_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="midterm-seminar-proposal_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="midterm-seminar-proposal_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="midterm-seminar-proposal_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Statistical models for expert judgment in environmental decision making</h1>
+</div>
+
+<div>
+  <div class="description">
+    <p>A proposal document for midterm seminar.</p>
+  </div>
+</div>
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <a href="https://ddrive.no/">Dmytro Perepolkin</a> 
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://www.cec.lu.se/dmytro-perepolkin">
+            Lund University
+            </a>
+          </p>
+      </div>
+    </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 25, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>The objective of science is learning from evidence. This is often interpreted as the science taking the “data-driven approach”, succinctly expressed by W. Edwards Deming:</p>
+<blockquote class="blockquote">
+<p>In God we trust. All others must bring data.</p>
+</blockquote>
+<p>However, even in the midst of “big data tsunami” the scientific voices emerge arguing that, the data alone may not be enough for making valid inferences about the world <span class="citation" data-cites="spiegelhalter2004IncorporatingBayesianIdeas">(<a href="#ref-spiegelhalter2004IncorporatingBayesianIdeas" role="doc-biblioref">Spiegelhalter 2004</a>)</span>. Inferences from data happen in the context of our understanding of the world drawn from the past experiences.</p>
+<p>Bayesian statistics have long advocated that instead of making implicit assumptions, the prior knowledge must be made explicit and assured to be relevant <span class="citation" data-cites="clayton2021BernoulliFallacyStatistical">(<a href="#ref-clayton2021BernoulliFallacyStatistical" role="doc-biblioref">Clayton 2021</a>)</span>. Bayesian statistics has risen to prominence in the recent decades, because some of the hard problems in science and policy are not being answered by the frequentist approach to data analysis <span class="citation" data-cites="acree2021MythStatisticalInference">(<a href="#ref-acree2021MythStatisticalInference" role="doc-biblioref">Acree 2021</a>)</span>. The prior knowledge is embedded in the context of scientific models, which describe causal relationships representing our understanding of how the world works. Therefore, the causal models need to be made explicit through DAGs which provide the rationale for including (or omitting) variables or factors in the analysis <span class="citation" data-cites="mcelreath2020StatisticalRethinkingBayesian pearl2018BookWhyNew cinelli2020CrashCourseGood">(<a href="#ref-mcelreath2020StatisticalRethinkingBayesian" role="doc-biblioref">McElreath 2020</a>; <a href="#ref-pearl2018BookWhyNew" role="doc-biblioref">Pearl and Mackenzie 2018</a>; <a href="#ref-cinelli2020CrashCourseGood" role="doc-biblioref">Cinelli, Forney, and Pearl 2020</a>)</span>.</p>
+<p>The purpose of my PhD is to aid these two aims:</p>
+<ol type="1">
+<li>research more effective ways of capturing the experts’ prior knowledge in the form of subjective probability distributions</li>
+<li>apply these techniques to inform environmental decisions through causal models</li>
+</ol>
+</section>
+<section id="progress" class="level1">
+<h1>Progress</h1>
+<section id="quantile-parameterized-priors-and-posterior-passing" class="level2">
+<h2 class="anchored" data-anchor-id="quantile-parameterized-priors-and-posterior-passing">Quantile-parameterized priors and posterior passing</h2>
+<p>Bayesian inference is about updating prior beliefs in light of new evidence. The beliefs are an expression of the state of knowledge (or ignorance) of an expert in the context of a model.</p>
+<p>The elicitation of continuous distributions for the quantity of interest often consists of eliciting a number of quantile-probability pairs (QPPs) and fitting a distribution to them <span class="citation" data-cites="ohagan2019ExpertKnowledgeElicitation kadane1998ExperiencesElicitation">(<a href="#ref-ohagan2019ExpertKnowledgeElicitation" role="doc-biblioref">O’Hagan 2019</a>; <a href="#ref-kadane1998ExperiencesElicitation" role="doc-biblioref">J. Kadane and Wolfson 1998</a>)</span>. The distribution is selected from the predefined set of “simple and convenient” distributions with a suitable boundedness accounting for the nature of the elicited quantity <span class="citation" data-cites="ohagan2006UncertainJudgementsEliciting">(<a href="#ref-ohagan2006UncertainJudgementsEliciting" role="doc-biblioref">O’Hagan et al. 2006</a>)</span>. The quantile-parameterized distributions (QPDs) represent an alternative route for selecting a distribution to characterize predictions or parameters. Because these distributions are parameterized by the QPPs, the elicited values can be used for defining the distribution directly, guaranteeing the fit and interpretability of the parameters.</p>
+<p>In the forthcoming paper titled “Quantile-parameterized priors and posterior passing” we are looking at the variety of distributions parameterized by QPPs found in the literature (Myerson, J-QPD, SQN, Metalog) and proposing some new variants (Logit-Myerson, Sech-Myerson) to facilitate easier elicitation and updating. Distributions characterized by QPPs can be thought as the distribution approximations which can either interpolate the expert’s epistemic quantile function or regularize empirical CDF to produce a closed-form distribution which is possible to update and sample from. In order for the interpolating function to go through every point exactly, the distribution needs to have enough parameters. Quantile-parameterized distributions (QPDs) achieve it because the elicited QPPs <em>are</em> the parameters, so these CDF-points are always honored exactly.</p>
+<p>The scientific knowledge is never final, and always subject to change with new data and evidence. In order to facilitate such cumulative learning, the posterior beliefs from one experiment should be taken as prior beliefs for the subsequent phases of investigation <span class="citation" data-cites="brand2017CumulativeScienceBayesian">(<a href="#ref-brand2017CumulativeScienceBayesian" role="doc-biblioref">Brand et al. 2017</a>)</span>. However, few of the traditional distribution have enough flexibility to closely and reliable approximate posterior samples. One solution which scientists take today is to combine data from both experiments or perform the experiments independently and try to synthesize the knowledge through meta-analysis. In the second part of the paper we are looking at the efficient way of approximating the posterior samples with a highly flexible QPD for subsequent sampling.</p>
+<p>Many QPDs are defined in terms of their quantile function and the most flexible QPDs (with the largest number of parameters), such as SQN and Metalog Distribution have a defining quantile function, which is not invertible (no respective CDF/PDF exist). Therefore, Bayesian updating for models with such distributions could be challenging.</p>
+</section>
+<section id="tenets-of-quantile-based-inference" class="level2">
+<h2 class="anchored" data-anchor-id="tenets-of-quantile-based-inference">Tenets of quantile-based inference</h2>
+<p>The traditional way of considering the distributions of random variables is through the prism of the <em>distribution function</em> and its derivative the <em>probability density function</em>. The “equally adequate representation” of the random variable can me done by the <em>quantile function</em> and its derivative the <em>quantile density function.</em> Defining a distribution via its quantile function has several advantages, including that the distributions with explicit quantile functions are easy to sample from and more complex distributions can be crafted using the simpler quantile functions as the building blocks <span class="citation" data-cites="gilchrist2000StatisticalModellingQuantile">(<a href="#ref-gilchrist2000StatisticalModellingQuantile" role="doc-biblioref">W. Gilchrist 2000</a>)</span>.</p>
+<p>Most of the knowledge and methods for Bayesian inference have been developed for the <em>density-defined</em> distributions. While there have been several published articles where <em>quantile</em> distributions were used in the context of the likelihood-free approximate Bayesian computation <span class="citation" data-cites="allingham2009BayesianEstimationQuantile">(<a href="#ref-allingham2009BayesianEstimationQuantile" role="doc-biblioref">Allingham, King, and Mengersen 2009</a>)</span>, the likelihood-based application of the Bayesian inference for <em>quantile</em> distributions has been limited <span class="citation" data-cites="rayner2002NumericalMaximumLikelihood haynes2005BayesianEstimationGandk nair2020BayesianInferenceQuantile">(<a href="#ref-rayner2002NumericalMaximumLikelihood" role="doc-biblioref">Rayner and MacGillivray 2002</a>; <a href="#ref-haynes2005BayesianEstimationGandk" role="doc-biblioref">Haynes and Mengersen 2005</a>; <a href="#ref-nair2020BayesianInferenceQuantile" role="doc-biblioref">Nair, Sankaran, and Dileepkumar 2020</a>)</span>.</p>
+<p>The paper “The tenets of quantile-based inference in Bayesian models” builds on the ideas of <span class="citation" data-cites="gilchrist2000StatisticalModellingQuantile">W. Gilchrist (<a href="#ref-gilchrist2000StatisticalModellingQuantile" role="doc-biblioref">2000</a>)</span>, <span class="citation" data-cites="rayner2002NumericalMaximumLikelihood">Rayner and MacGillivray (<a href="#ref-rayner2002NumericalMaximumLikelihood" role="doc-biblioref">2002</a>)</span>, <span class="citation" data-cites="nair2020BayesianInferenceQuantile">Nair, Sankaran, and Dileepkumar (<a href="#ref-nair2020BayesianInferenceQuantile" role="doc-biblioref">2020</a>)</span> and systematically presents and illustrates the Bayesian inference using quantile functions. We apply the principles of <em>quantile-based inference</em> to Bayesian updating of parameters in the univariate and regression settings using the flexible and extensible quantile sampling distributions.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/moebius-loop.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<p></p><figcaption class="figure-caption">Moebius strip of probability functions.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>First, we briefly review the different ways of specifying a probability distribution (Figure @ref(fig:moebius-chart)) and discuss several examples of the distributions defined by a quantile function, found in the literature. In the paper, we rely on the density quantile function (DQF) <span class="math inline">\([q(u)]^{-1}\)</span>, i.e.&nbsp;the density of a random variable expressed in terms of the cumulative distribution function <span class="citation" data-cites="perri2007PartiallyAdaptiveEstimation">(<a href="#ref-perri2007PartiallyAdaptiveEstimation" role="doc-biblioref">Perri and Tarsitano 2007</a>)</span>, to define the likelihood in a Bayesian model based on a quantile sampling distribution.</p>
+<p>Even though the quantile distributions lack the closed-form CDF <span class="math inline">\(F(y)=u\)</span>, in most cases, the depths <span class="math inline">\(u\)</span> can be approximated by numerically inverting the <span class="math inline">\(Q(u)\)</span>. We denote the numerically inverted quantile function as <span class="math inline">\(\widehat{Q^{-1}}(y)\)</span> or <span class="math inline">\(\widehat{F}(y)\)</span>. We propose to denote quantile distributions as <span class="math inline">\(u \overset{y}{\backsim} \text{Distribution}(\delta)\)</span>, where the <em>back-tilde symbol</em> with the variable name overscript <span class="math inline">\(\overset{y}{\backsim}\)</span> should be read “inversely distributed as” to indicate that the <em>depth</em> <span class="math inline">\(u\)</span> is fully determined given the value of the random variable <span class="math inline">\(Y\)</span> and the parameterized inverse distribution function indicated to the right of the <em>back-tilde</em> symbol.</p>
+<p>In this paper, we summarize the quantile function substitutions proposed by <span class="citation" data-cites="nair2020BayesianInferenceQuantile">Nair, Sankaran, and Dileepkumar (<a href="#ref-nair2020BayesianInferenceQuantile" role="doc-biblioref">2020</a>)</span> and implemented by <span class="citation" data-cites="rayner2002NumericalMaximumLikelihood">Rayner and MacGillivray (<a href="#ref-rayner2002NumericalMaximumLikelihood" role="doc-biblioref">2002</a>)</span> introducing the terms <em>quantile-based</em> prior and <em>quantile-based</em> likelihood and show the equivalence of the two ways of expressing the likelihood in Bayesian models. We then illustrate the application of the <em>quantile-based inference</em> the to univariate and regression models and provide code examples for models based on the quantile sampling distributions in Stan <span class="citation" data-cites="gabry2022CmdstanrInterfaceCmdStan">(<a href="#ref-gabry2022CmdstanrInterfaceCmdStan" role="doc-biblioref">Gabry and Češnovar 2022</a>)</span> and in R <span class="citation" data-cites="rcoreteam2021LanguageEnvironmentStatistical">(<a href="#ref-rcoreteam2021LanguageEnvironmentStatistical" role="doc-biblioref">R Core Team 2021</a>)</span>. For the univariate model, we update the parameters of a bathtub-shaped Govindarajulu distribution and for the regression model, we pick the flattened skew-logistic distribution to model the error term.</p>
+<p>The <em>traditional</em> approach to quantile regression introduced by <span class="citation" data-cites="koenker2005QuantileRegression">Koenker (<a href="#ref-koenker2005QuantileRegression" role="doc-biblioref">2005</a>)</span> is, in essence, semi-parametric, because it does not require the user “to specify the distribution of the error term as it is allowed to take any form” <span class="citation" data-cites="yu2001BayesianQuantileRegression">(<a href="#ref-yu2001BayesianQuantileRegression" role="doc-biblioref">Yu and Moyeed 2001</a>)</span>. The approach we are taking is in essence the Bayesian version of the <em>parametric quantile regression</em> (PQR), because in this type of regression the distribution of the error term is modeled explicitly <span class="citation" data-cites="gilchrist2008RegressionRevisited sharma2020QuantileBasedApproachSupervised su2015FlexibleParametricQuantile dean2009VersatileRegressionSimple muraleedharan2016RegressionQuantileModels perri2007PartiallyAdaptiveEstimation perri2008DistributionalLeastSquares">(<a href="#ref-gilchrist2008RegressionRevisited" role="doc-biblioref">W. Gilchrist 2008</a>; <a href="#ref-sharma2020QuantileBasedApproachSupervised" role="doc-biblioref">Sharma and Chakrabarty 2020</a>; <a href="#ref-su2015FlexibleParametricQuantile" role="doc-biblioref">Su 2015</a>; <a href="#ref-dean2009VersatileRegressionSimple" role="doc-biblioref">Dean and King 2009</a>; <a href="#ref-muraleedharan2016RegressionQuantileModels" role="doc-biblioref">Muraleedharan, Lucas, and Guedes Soares 2016</a>; <a href="#ref-perri2007PartiallyAdaptiveEstimation" role="doc-biblioref">Perri and Tarsitano 2007</a>; <a href="#ref-perri2008DistributionalLeastSquares" role="doc-biblioref">Perri and Tarsitano 2008</a>)</span>. Since in the PQR the regression equation is expressed in terms of the depth <span class="math inline">\(u\)</span> we can extract the coherent (non-crossing) quantile regression lines for any set of fractiles.</p>
+<p>The <em>quantile-based inference</em> opens up a wide set of new distributions to serve as likelihood and/or prior in Bayesian models. Besides, the flexibility offered by the distributions defined in terms of the quantile function <span class="citation" data-cites="gilchrist2007ModelingFittingQuantile">(<a href="#ref-gilchrist2007ModelingFittingQuantile" role="doc-biblioref">W. G. Gilchrist 2007</a>)</span>, and in particular their easily extensible nature using Gilchrist’s QF transformation rules, allows ultimate freedom in expressing the expert-informed priors.</p>
+<p>Embracing and expanding the use of quantile distributions in Bayesian analysis can enable new solutions for old problems and enrich the toolkit available to scientists for performing hard inference tasks. We hope that the <em>quantile-based inference</em> methods presented in this paper can contribute to expanding the body of knowledge about the use of quantile functions in Bayesian statistics and fuel further research in the area of quantile distributions.</p>
+</section>
+<section id="hybrid-elicitation-and-quantile-parameterized-likelihood" class="level2">
+<h2 class="anchored" data-anchor-id="hybrid-elicitation-and-quantile-parameterized-likelihood">Hybrid elicitation and quantile-parameterized likelihood</h2>
+<p>Prior distribution is an expression of expert’s understanding of the properties of the data-generative process at hand and their translation of this understanding into the language of a particular statistical model. The assumptions behind the direct, <em>structural</em> approach to elicitation are that the <em>domain expert</em> and the <em>statistician</em> are fully aligned on the mathematical model which can be used to represent the data-generative process, and that the <em>domain expert</em> has sufficient statistical expertise to translate their belief into the distribution of the parameters in such model <span class="citation" data-cites="winkler1980PriorInformationPredictive">(<a href="#ref-winkler1980PriorInformationPredictive" role="doc-biblioref">Winkler 1980</a>)</span>. In case non-informative priors are used, the <em>statistician</em> acts as a clueless expert, having no relevant information about the prior distribution of the model parameters. Thus, prior specification is a subset of the expert knowledge elicitation in the absence of prior knowledge <span class="citation" data-cites="mikkola2021PriorKnowledgeElicitation">(<a href="#ref-mikkola2021PriorKnowledgeElicitation" role="doc-biblioref">Mikkola et al. 2021</a>)</span>.</p>
+<p>The alternative, <em>predictive</em> approach to specifying priors focuses on eliciting the (conditional) predictions from a <strong>domain expert</strong> and then using them to <em>infer</em> the distribution of the parameters for the suitable model <span class="citation" data-cites="winkler1980PriorInformationPredictive kadane1980PredictiveStructuralMethods kadane1998ExperiencesElicitation akbarov2009ProbabilityElicitationPredictive hartmann2020FlexiblePriorElicitation mikkola2021PriorKnowledgeElicitation">(<a href="#ref-winkler1980PriorInformationPredictive" role="doc-biblioref">Winkler 1980</a>; <a href="#ref-kadane1980PredictiveStructuralMethods" role="doc-biblioref">J. B. Kadane 1980</a>; <a href="#ref-kadane1998ExperiencesElicitation" role="doc-biblioref">J. Kadane and Wolfson 1998</a>; <a href="#ref-akbarov2009ProbabilityElicitationPredictive" role="doc-biblioref">Akbarov 2009</a>; <a href="#ref-hartmann2020FlexiblePriorElicitation" role="doc-biblioref">Hartmann et al. 2020</a>; <a href="#ref-mikkola2021PriorKnowledgeElicitation" role="doc-biblioref">Mikkola et al. 2021</a>)</span>.</p>
+<p>We present an example of the expert-elicited foods consumption distribution used for exposure assessment, and update it with the observations of actual consumption obtained from the food consumption database. We extracted the summary statistics from the EFSA food consumption database for the food category level 5 with few data points. We elicited the distribution of food consumption for this category using a set of quantiles, along with the expert uncertainty about the quantiles, which gets encoded into a Dirichlet distribution. We adopt the approach described by <span class="citation" data-cites="elfadaly2013ElicitingDirichletConnor">(<a href="#ref-elfadaly2013ElicitingDirichletConnor" role="doc-biblioref">Elfadaly and Garthwaite 2013</a>)</span> for assessing the hyperparameter vector of a Dirichlet distribution using the conditional univariate beta distributions. In this method the expert assesses the quartiles of the probability for each category using the symmetric percentile triplet elicitation. The resulting Dirichlet distribution can be used as a prior for the model parametrized by quantiles. Quantile-parameterized distributions (QPDs) are parameterized by a set of quantile-probability pairs (quantile-probability tuple, QPT) describing an observable <span class="citation" data-cites="keelin2011QuantileParameterizedDistributions">(<a href="#ref-keelin2011QuantileParameterizedDistributions" role="doc-biblioref">Keelin and Powley 2011</a>)</span>. Uncertainty about the quantiles was updated using Bayesian inference <span class="citation" data-cites="nair2020BayesianInferenceQuantile perepolkin2021TenetsQuantilebasedInference rayner2002NumericalMaximumLikelihood">(<a href="#ref-nair2020BayesianInferenceQuantile" role="doc-biblioref">Nair, Sankaran, and Dileepkumar 2020</a>; <a href="#ref-perepolkin2021TenetsQuantilebasedInference" role="doc-biblioref">Perepolkin, Goodrich, and Sahlin 2021</a>; <a href="#ref-rayner2002NumericalMaximumLikelihood" role="doc-biblioref">Rayner and MacGillivray 2002</a>)</span>. Estimates of consumption by a median and a high consumer were extracted from the posterior food consumption distribution together with uncertainty in these estimates, which can be used in exposure assessment.</p>
+<p>The hybrid elicitation consists of two phases: elicitation of the quantile values <span class="math inline">\(q\)</span> and elicitation of uncertainty in the cumulative probabilities associated with them (i.e.&nbsp;possible vectors of <span class="math inline">\(p\)</span> which could correspond to the specified vector <span class="math inline">\(q\)</span>). The primary goal of eliciting the vector <span class="math inline">\(q\)</span> is to “position” the prior on the data (<span class="math inline">\(x\)</span>) scale and provide a reasonable baseline for the follow up elicitation. In fact, the hyperparameter vector <span class="math inline">\(q\)</span> specifies the location of the QDirichlet prior, while the hyperparameter vector <span class="math inline">\(α\)</span> is responsible for defining its shape.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/model-graph.png" class="img-fluid figure-img" style="width:80.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Our approach to constructing a prior distribution for the simplex Δ is similar to the method adopted by <span class="citation" data-cites="burkner2020ModellingMonotonicEffects">(<a href="#ref-burkner2020ModellingMonotonicEffects" role="doc-biblioref">Bürkner and Charpentier 2020</a>)</span> for modeling the monotonic effects in ordinal regression. The parameter vector of Dirichlet distribution combined with the vector of elicited quantiles act as hyper-parameters of the proposed QDirichlet prior, which describes the uncertainty in the parameters of the quantile-parameterized model (Figure @ref(fig:model-graph)).</p>
+<p>In Figure @ref(fig:model-graph) the prior is represented by the Dirichlet distribution with hyperparameter α specifying the uncertainty in the cumulative probabilities and a vector q representing the quantile values corresponding to the sampled cumulative probabilities. The indirect likelihood is represented by the metalog distribution which relies on depths ui given the parameterizing QPT <span class="math inline">\(\{p,q\}_n\)</span>. The depths <span class="math inline">\(u\)</span> can be estimated using the numerical inverse of the metalog quantile function</p>
+<p>Asking experts to provide their uncertainty about the elicited QPT is enough to quantify the uncertainty about the food consumption distribution. This approach is particularly useful when food consumption data is sparse. Parametric elicitation aims to describe epistemic uncertainty contained in the parameters of the model with the help of the experts. Predictive elicitation describes the uncertainty in the next observation without distinguishing between the randomness in the model and the lack of knowledge about the model parameters. Hybrid elicitation starts by describing the next observation using a QPT, but then pivots to characterization of uncertainty contained in the assessment of the QPT itself. This is accomplished by describing a hypothetical sample from the target population, which corresponds to cumulative probabilities. These probabilities, along with a set of quantile values, can serve as parameters in the quantile-parameterized model. Hybrid elicitation, like predictive elicitation, describes only observable quantities. At the same time, like parametric elicitation, the hybrid elicitation results in the characterization of uncertainty in the model parameters. Hybrid elicitation, therefore, can be viewed as observations-level parametric elicitation for quantile-parameterized models.</p>
+</section>
+</section>
+<section id="going-forward" class="level1">
+<h1>Going forward</h1>
+<section id="expert-informed-adjustments-to-species-distribution-models-using-presence-only-data" class="level2">
+<h2 class="anchored" data-anchor-id="expert-informed-adjustments-to-species-distribution-models-using-presence-only-data">Expert-informed adjustments to species distribution models using presence-only data</h2>
+<p>Species distribution models are often used in ecology and environmental science. However, the most widely available data to inform these models are presence-only observations collated by the volunteers into the species occurrence databases, such as <a href="https://www.gbif.org/">GBIF</a>. The non-random sampling nature of the presence-only data makes it impossible to estimate the species prevalence from it, without making some critical simplifying adjustments. We use the expert-elicited species absence distribution to complement the presence-only data for unbiased estimation of prevalence.</p>
+<p>We will use expert knowledge elicitation to inform Bayesian hierarchical spatially-referenced model in order to supplement the presence-only data with expert-informed judgments to produce unbiased estimates of species distribution.</p>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>Using expert judgment in ecological modeling can solve some of the problems related to measurement protocols in species distribution modeling. This PhD project develops new tools for expert elicitation and incorporates the improved elicitation protocol into scientific inquiry in order to inform policy and decision making in waterfowl management.</p>
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-acree2021MythStatisticalInference" class="csl-entry" role="doc-biblioentry">
+Acree, Michael C. 2021. <em>The Myth of Statistical Inference</em>. Cham: Springer International Publishing. <a href="https://doi.org/10.1007/978-3-030-73257-8">https://doi.org/10.1007/978-3-030-73257-8</a>.
+</div>
+<div id="ref-akbarov2009ProbabilityElicitationPredictive" class="csl-entry" role="doc-biblioentry">
+Akbarov, A. 2009. <span>“Probability Elicitation: Predictive Approach.”</span> PhD thesis, University of Salford. <a href="http://usir.salford.ac.uk/id/eprint/26502/?template=banner">http://usir.salford.ac.uk/id/eprint/26502/?template=banner</a>.
+</div>
+<div id="ref-allingham2009BayesianEstimationQuantile" class="csl-entry" role="doc-biblioentry">
+Allingham, D., R. A. R. King, and K. L. Mengersen. 2009. <span>“Bayesian Estimation of Quantile Distributions.”</span> <em>Statistics and Computing</em> 19 (2): 189–201. <a href="https://doi.org/dn3mfd">https://doi.org/dn3mfd</a>.
+</div>
+<div id="ref-brand2017CumulativeScienceBayesian" class="csl-entry" role="doc-biblioentry">
+Brand, Charlotte Olivia, James Ounsley, Daniel van der Post, and Tom Morgan. 2017. <span>“Cumulative Science via Bayesian Posterior Passing, an Introduction.”</span> March. <a href="https://doi.org/10.31235/osf.io/67jh7">https://doi.org/10.31235/osf.io/67jh7</a>.
+</div>
+<div id="ref-burkner2020ModellingMonotonicEffects" class="csl-entry" role="doc-biblioentry">
+Bürkner, Paul-Christian, and Emmanuel Charpentier. 2020. <span>“Modelling Monotonic Effects of Ordinal Predictors in Bayesian Regression Models.”</span> <em>British Journal of Mathematical and Statistical Psychology</em> 73 (3): 420–51. <a href="https://doi.org/ggqtkh">https://doi.org/ggqtkh</a>.
+</div>
+<div id="ref-cinelli2020CrashCourseGood" class="csl-entry" role="doc-biblioentry">
+Cinelli, Carlos, Andrew Forney, and Judea Pearl. 2020. <span>“A Crash Course in Good and Bad Controls.”</span> SSRN Scholarly Paper 3689437. Rochester, NY: Social Science Research Network. <a href="https://doi.org/10.2139/ssrn.3689437">https://doi.org/10.2139/ssrn.3689437</a>.
+</div>
+<div id="ref-clayton2021BernoulliFallacyStatistical" class="csl-entry" role="doc-biblioentry">
+Clayton, Aubrey. 2021. <em>Bernoulli’s Fallacy: Statistical Illogic and the Crisis of Modern Science</em>. New York: Columbia University Press.
+</div>
+<div id="ref-dean2009VersatileRegressionSimple" class="csl-entry" role="doc-biblioentry">
+Dean, Benjamin, and AR King. 2009. <span>“Versatile Regression: Simple Regression with a Non-Normal Error Distribution.”</span> In, 7–8.
+</div>
+<div id="ref-elfadaly2013ElicitingDirichletConnor" class="csl-entry" role="doc-biblioentry">
+Elfadaly, Fadlalla G., and Paul H. Garthwaite. 2013. <span>“Eliciting Dirichlet and Connor–Mosimann Prior Distributions for Multinomial Models.”</span> <em>TEST</em> 22 (4): 628–46. <a href="https://doi.org/10.1007/s11749-013-0336-4">https://doi.org/10.1007/s11749-013-0336-4</a>.
+</div>
+<div id="ref-gabry2022CmdstanrInterfaceCmdStan" class="csl-entry" role="doc-biblioentry">
+Gabry, Jonah, and Rok Češnovar. 2022. <em>Cmdstanr: R Interface to ’CmdStan’</em>. Manual.
+</div>
+<div id="ref-gilchrist2000StatisticalModellingQuantile" class="csl-entry" role="doc-biblioentry">
+Gilchrist, Warren. 2000. <em>Statistical Modelling with Quantile Functions</em>. Boca Raton: Chapman &amp; Hall/CRC.
+</div>
+<div id="ref-gilchrist2008RegressionRevisited" class="csl-entry" role="doc-biblioentry">
+———. 2008. <span>“Regression Revisited.”</span> <em>International Statistical Review</em> 76 (3): 401–18. <a href="https://doi.org/10.1111/j.1751-5823.2008.00053.x">https://doi.org/10.1111/j.1751-5823.2008.00053.x</a>.
+</div>
+<div id="ref-gilchrist2007ModelingFittingQuantile" class="csl-entry" role="doc-biblioentry">
+Gilchrist, Warren G. 2007. <span>“Modeling and Fitting Quantile Distributions and Regressions.”</span> <em>American Journal of Mathematical and Management Sciences</em> 27 (3-4): 401–39. <a href="https://doi.org/gjqt4f">https://doi.org/gjqt4f</a>.
+</div>
+<div id="ref-hartmann2020FlexiblePriorElicitation" class="csl-entry" role="doc-biblioentry">
+Hartmann, Marcelo, Georgi Agiashvili, Paul Bürkner, and Arto Klami. 2020. <span>“Flexible Prior Elicitation via the Prior Predictive Distribution.”</span> <a href="http://arxiv.org/abs/2002.09868">http://arxiv.org/abs/2002.09868</a>.
+</div>
+<div id="ref-haynes2005BayesianEstimationGandk" class="csl-entry" role="doc-biblioentry">
+Haynes, Michele, and Kerrie Mengersen. 2005. <span>“Bayesian Estimation of g-and-k Distributions Using MCMC.”</span> <em>Computational Statistics</em> 20 (1): 7–30. <a href="https://doi.org/dpgjv5">https://doi.org/dpgjv5</a>.
+</div>
+<div id="ref-kadane1980PredictiveStructuralMethods" class="csl-entry" role="doc-biblioentry">
+Kadane, Joseph B. 1980. <span>“Predictive and Structural Methods for Eliciting Prior Distributions.”</span> <em>Bayesian Analysis in Econometrics and Statistics</em> 18.
+</div>
+<div id="ref-kadane1998ExperiencesElicitation" class="csl-entry" role="doc-biblioentry">
+Kadane, Joseph, and Lara J. Wolfson. 1998. <span>“Experiences in Elicitation.”</span> <em>Journal of the Royal Statistical Society: Series D (The Statistician)</em> 47 (1): 3–19. <a href="https://doi.org/cvdn73">https://doi.org/cvdn73</a>.
+</div>
+<div id="ref-keelin2011QuantileParameterizedDistributions" class="csl-entry" role="doc-biblioentry">
+Keelin, Thomas W., and Bradford W. Powley. 2011. <span>“Quantile-Parameterized Distributions.”</span> <em>Decision Analysis</em> 8 (3): 206–19. <a href="https://doi.org/10.1287/deca.1110.0213">https://doi.org/10.1287/deca.1110.0213</a>.
+</div>
+<div id="ref-koenker2005QuantileRegression" class="csl-entry" role="doc-biblioentry">
+Koenker, Roger. 2005. <em>Quantile Regression</em>. Econometric Society Monographs, no. 38. Cambridge ; New York: Cambridge University Press.
+</div>
+<div id="ref-mcelreath2020StatisticalRethinkingBayesian" class="csl-entry" role="doc-biblioentry">
+McElreath, Richard. 2020. <em>Statistical Rethinking: A Bayesian Course with Examples in r and Stan</em>. 2nd ed. New York, NY: Chapman; Hall/CRC. <a href="https://doi.org/10.1201/9780429029608">https://doi.org/10.1201/9780429029608</a>.
+</div>
+<div id="ref-mikkola2021PriorKnowledgeElicitation" class="csl-entry" role="doc-biblioentry">
+Mikkola, Petrus, Osvaldo A. Martin, Suyog Chandramouli, Marcelo Hartmann, Oriol Abril Pla, Owen Thomas, Henri Pesonen, et al. 2021. <span>“Prior Knowledge Elicitation: The Past, Present, and Future.”</span> <a href="http://arxiv.org/abs/2112.01380">http://arxiv.org/abs/2112.01380</a>.
+</div>
+<div id="ref-muraleedharan2016RegressionQuantileModels" class="csl-entry" role="doc-biblioentry">
+Muraleedharan, G., C. Lucas, and C. Guedes Soares. 2016. <span>“Regression Quantile Models for Estimating Trends in Extreme Significant Wave Heights.”</span> <em>Ocean Engineering</em> 118 (May): 204–15. <a href="https://doi.org/10.1016/j.oceaneng.2016.04.009">https://doi.org/10.1016/j.oceaneng.2016.04.009</a>.
+</div>
+<div id="ref-nair2020BayesianInferenceQuantile" class="csl-entry" role="doc-biblioentry">
+Nair, N. Unnikrishnan, P. G. Sankaran, and M. Dileepkumar. 2020. <span>“Bayesian Inference in Quantile Functions.”</span> <em>Communications in Statistics - Theory and Methods</em> 0 (0): 1–13. <a href="https://doi.org/ghkdr4">https://doi.org/ghkdr4</a>.
+</div>
+<div id="ref-ohagan2019ExpertKnowledgeElicitation" class="csl-entry" role="doc-biblioentry">
+O’Hagan, Anthony. 2019. <span>“Expert Knowledge Elicitation: Subjective but Scientific.”</span> <em>The American Statistician</em> 73 (March): 69–81. <a href="https://doi.org/gf4jz2">https://doi.org/gf4jz2</a>.
+</div>
+<div id="ref-ohagan2006UncertainJudgementsEliciting" class="csl-entry" role="doc-biblioentry">
+O’Hagan, Anthony, Caitlin E. Buck, Alireza Daneshkhah, J. Richard Eiser, Paul H. Garthwaite, David J. Jenkinson, Jeremy E. Oakley, and Tim Rakow. 2006. <em>Uncertain Judgements: Eliciting Experts’ Probabilities: O’hagan/Uncertain Judgements: Eliciting Experts’ Probabilities</em>. Chichester, UK: John Wiley &amp; Sons, Ltd. <a href="https://doi.org/10.1002/0470033312">https://doi.org/10.1002/0470033312</a>.
+</div>
+<div id="ref-pearl2018BookWhyNew" class="csl-entry" role="doc-biblioentry">
+Pearl, Judea, and Dana Mackenzie. 2018. <em>The Book of Why: The New Science of Cause and Effect</em>. New York: Basic Books.
+</div>
+<div id="ref-perepolkin2021TenetsQuantilebasedInference" class="csl-entry" role="doc-biblioentry">
+Perepolkin, Dmytro, Benjamin Goodrich, and Ullrika Sahlin. 2021. <span>“The Tenets of Quantile-Based Inference in Bayesian Models.”</span> Preprint. https://osf.io/enzgs: Open Science Framework. <a href="https://doi.org/10.31219/osf.io/enzgs">https://doi.org/10.31219/osf.io/enzgs</a>.
+</div>
+<div id="ref-perri2008DistributionalLeastSquares" class="csl-entry" role="doc-biblioentry">
+Perri, Pier Francesco, and A Tarsitano. 2008. <span>“Distributional Least Squares Based on the Generalized Lambda Distribution.”</span> In, 400:341–48. Physica-Verlag, A Springer Company.
+</div>
+<div id="ref-perri2007PartiallyAdaptiveEstimation" class="csl-entry" role="doc-biblioentry">
+Perri, Pier Francesco, and Agostino Tarsitano. 2007. <span>“Partially Adaptive Estimation via Quantile Functions.”</span> <em>Communications in Statistics - Simulation and Computation</em> 36 (2): 277–96. <a href="https://doi.org/10.1080/03610910601158369">https://doi.org/10.1080/03610910601158369</a>.
+</div>
+<div id="ref-rcoreteam2021LanguageEnvironmentStatistical" class="csl-entry" role="doc-biblioentry">
+R Core Team. 2021. <em>R: A Language and Environment for Statistical Computing</em>. Manual. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
+</div>
+<div id="ref-rayner2002NumericalMaximumLikelihood" class="csl-entry" role="doc-biblioentry">
+Rayner, G. D., and H. L. MacGillivray. 2002. <span>“Numerical Maximum Likelihood Estimation for the g-and-k and Generalized g-and-h Distributions.”</span> <em>Statistics and Computing</em> 12 (1): 57–75. <a href="https://doi.org/c27574">https://doi.org/c27574</a>.
+</div>
+<div id="ref-sharma2020QuantileBasedApproachSupervised" class="csl-entry" role="doc-biblioentry">
+Sharma, Dreamlee, and Tapan Kumar Chakrabarty. 2020. <span>“A Quantile-Based Approach to Supervised Learning.”</span> In <em>Applications of Machine Learning</em>, edited by Prashant Johri, Jitendra Kumar Verma, and Sudip Paul, 321–40. Algorithms for Intelligent Systems. Singapore: Springer Singapore. <a href="https://doi.org/10.1007/978-981-15-3357-0_21">https://doi.org/10.1007/978-981-15-3357-0_21</a>.
+</div>
+<div id="ref-spiegelhalter2004IncorporatingBayesianIdeas" class="csl-entry" role="doc-biblioentry">
+Spiegelhalter, David J. 2004. <span>“Incorporating Bayesian Ideas into Health-Care Evaluation.”</span> <em>Statistical Science</em> 19 (1): 156–74. <a href="https://doi.org/10.1214/088342304000000080">https://doi.org/10.1214/088342304000000080</a>.
+</div>
+<div id="ref-su2015FlexibleParametricQuantile" class="csl-entry" role="doc-biblioentry">
+Su, Steve. 2015. <span>“Flexible Parametric Quantile Regression Model.”</span> <em>Statistics and Computing</em> 25 (3): 635–50. <a href="https://doi.org/10.1007/s11222-014-9457-1">https://doi.org/10.1007/s11222-014-9457-1</a>.
+</div>
+<div id="ref-winkler1980PriorInformationPredictive" class="csl-entry" role="doc-biblioentry">
+Winkler, Robert L. 1980. <span>“Prior Information, Predictive Distributions, and Bayesian Model-Building.”</span> <em>Bayesian Analysis in Econometrics and Statistics. North-Holland Publishing Company</em>, 95–109.
+</div>
+<div id="ref-yu2001BayesianQuantileRegression" class="csl-entry" role="doc-biblioentry">
+Yu, Keming, and Rana A. Moyeed. 2001. <span>“Bayesian Quantile Regression.”</span> <em>Statistics &amp; Probability Letters</em> 54 (4): 437–47. <a href="https://doi.org/10.1016/S0167-7152(01)00124-9">https://doi.org/10.1016/S0167-7152(01)00124-9</a>.
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{perepolkin2022,
+  author = {Dmytro Perepolkin},
+  editor = {},
+  title = {Statistical Models for Expert Judgment in Environmental
+    Decision Making},
+  date = {2022-08-25},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-perepolkin2022" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Dmytro Perepolkin. 2022. <span>“Statistical Models for Expert Judgment
+in Environmental Decision Making.”</span> <em>Midterm Seminar
+Report</em>.
+</div></div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

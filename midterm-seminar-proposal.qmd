@@ -1,0 +1,126 @@
+---
+title: "Statistical models for expert judgment in environmental decision making"
+description: | 
+  A proposal document for midterm seminar.
+date: 2022-08-25
+format: 
+  html:
+    theme: flatly
+author:
+  - name: Dmytro Perepolkin
+    url: https://ddrive.no/
+    affiliation: Lund University
+    affiliation-url: https://www.cec.lu.se/dmytro-perepolkin
+citation:
+  type: article
+  container-title: "Midterm seminar report"
+  #citation_technical_report_institution: Lund University
+  #doi: "10.23915/reprodocs.00010"
+  #url: https://dmi3kno.github.io/LU-midterm/midterm-seminar-proposal.html
+  #keywords: bayesian, statistics, citations
+  #issued: 2022-08-25
+  #available-date: 2022-08-25
+  #pdf-url: https://github.com/dmi3kno/LU-midterm/
+  language: en
+  #issue: 1
+  #volume: 1
+  #abstract-url: https://dmi3kno.github.io/LU-midterm/midterm-seminar-proposal.html
+keywords: bayesian inference, quantile functions
+#google-scholar: true
+bibliography: "`r rbbt::bbt_write_bib('midterm-seminar-proposal.bib', overwrite = TRUE)`"
+---
+
+# Introduction
+
+The objective of science is learning from evidence. This is often interpreted as the science taking the "data-driven approach", succinctly expressed by W. Edwards Deming:
+
+> In God we trust. All others must bring data.
+
+However, even in the midst of "big data tsunami" the scientific voices emerge arguing that, the data alone may not be enough for making valid inferences about the world [@spiegelhalter2004IncorporatingBayesianIdeas]. Inferences from data happen in the context of our understanding of the world drawn from the past experiences.
+
+Bayesian statistics have long advocated that instead of making implicit assumptions, the prior knowledge must be made explicit and assured to be relevant [@clayton2021BernoulliFallacyStatistical]. Bayesian statistics has risen to prominence in the recent decades, because some of the hard problems in science and policy are not being answered by the frequentist approach to data analysis [@acree2021MythStatisticalInference]. The prior knowledge is embedded in the context of scientific models, which describe causal relationships representing our understanding of how the world works. Therefore, the causal models need to be made explicit through DAGs which provide the rationale for including (or omitting) variables or factors in the analysis [@mcelreath2020StatisticalRethinkingBayesian; @pearl2018BookWhyNew; @cinelli2020CrashCourseGood].
+
+The purpose of my PhD is to aid these two aims: 
+
+1) research more effective ways of capturing the experts' prior knowledge in the form of subjective probability distributions
+2) apply these techniques to inform environmental decisions through causal models
+
+# Progress
+## Quantile-parameterized priors and posterior passing
+
+Bayesian inference is about updating prior beliefs in light of new evidence. 
+The beliefs are an expression of the state of knowledge (or ignorance) of an expert in the context of a model. 
+
+The elicitation of continuous distributions for the quantity of interest often consists of eliciting a number of quantile-probability pairs (QPPs) and fitting a distribution to them [@ohagan2019ExpertKnowledgeElicitation; @kadane1998ExperiencesElicitation]. The distribution is selected from the predefined set of "simple and convenient" distributions with a suitable boundedness accounting for the nature of the elicited quantity [@ohagan2006UncertainJudgementsEliciting]. The quantile-parameterized distributions (QPDs) represent an alternative route for selecting a distribution to characterize predictions or parameters. Because these distributions are parameterized by the QPPs, the elicited values can be used for defining the distribution directly, guaranteeing the fit and interpretability of the parameters. 
+
+In the forthcoming paper titled "Quantile-parameterized priors and posterior passing" we are looking at the variety of distributions parameterized by QPPs found in the literature (Myerson, J-QPD, SQN, Metalog) and proposing some new variants (Logit-Myerson, Sech-Myerson) to facilitate easier elicitation and updating. Distributions characterized by QPPs can be thought as the distribution approximations which can either interpolate the expert's epistemic quantile function or regularize empirical CDF to produce a closed-form distribution which is possible to update and sample from. In order for the interpolating function to go through every point exactly, the distribution needs to have enough parameters. Quantile-parameterized distributions (QPDs) achieve it because the elicited QPPs *are* the parameters, so these CDF-points are always honored exactly. 
+
+The scientific knowledge is never final, and always subject to change with new data and evidence. In order to facilitate such cumulative learning, the posterior beliefs from one experiment should be taken as prior beliefs for the subsequent phases of investigation [@brand2017CumulativeScienceBayesian]. However, few of the traditional distribution have enough flexibility to closely and reliable approximate posterior samples. One solution which scientists take today is to combine data from both experiments or perform the experiments independently and try to synthesize the knowledge through meta-analysis. In the second part of the paper we are looking at the efficient way of approximating the posterior samples with a highly flexible QPD for subsequent sampling. 
+
+Many QPDs are defined in terms of their quantile function and the most flexible QPDs (with the largest number of parameters), such as SQN and Metalog Distribution have a defining quantile function, which is not invertible (no respective CDF/PDF exist). Therefore, Bayesian updating for models with such distributions could be challenging. 
+
+
+## Tenets of quantile-based inference
+
+The traditional way of considering the distributions of random variables is through the prism of the *distribution function* and its derivative the *probability density function*. The "equally adequate representation" of the random variable can me done by the *quantile function* and its derivative the *quantile density function.* Defining a distribution via its quantile function has several advantages, including that the distributions with explicit quantile functions are easy to sample from and more complex distributions can be crafted using the simpler quantile functions as the building blocks [@gilchrist2000StatisticalModellingQuantile].
+
+Most of the knowledge and methods for Bayesian inference have been developed for the *density-defined* distributions. While there have been several published articles where *quantile* distributions were used in the context of the likelihood-free approximate Bayesian computation [@allingham2009BayesianEstimationQuantile], the likelihood-based application of the Bayesian inference for *quantile* distributions has been limited [@rayner2002NumericalMaximumLikelihood; @haynes2005BayesianEstimationGandk; @nair2020BayesianInferenceQuantile].
+
+The paper "The tenets of quantile-based inference in Bayesian models" builds on the ideas of @gilchrist2000StatisticalModellingQuantile, @rayner2002NumericalMaximumLikelihood, @nair2020BayesianInferenceQuantile and systematically presents and illustrates the Bayesian inference using quantile functions. We apply the principles of *quantile-based inference* to Bayesian updating of parameters in the univariate and regression settings using the flexible and extensible quantile sampling distributions.
+
+```{r moebius-chart, fig.cap="Moebius strip of probability functions.", fig.align='center', out.width="50%", echo=FALSE}
+rsvg::rsvg_png("img/moebius-loop.svg", "img/moebius-loop.png", width=600, height = 600)
+knitr::include_graphics("img/moebius-loop.png", dpi=200)
+```
+
+First, we briefly review the different ways of specifying a probability distribution (Figure \@ref(fig:moebius-chart)) and discuss several examples of the distributions defined by a quantile function, found in the literature. In the paper, we rely on the density quantile function (DQF) $[q(u)]^{-1}$, i.e. the density of a random variable expressed in terms of the cumulative distribution function [@perri2007PartiallyAdaptiveEstimation], to define the likelihood in a Bayesian model based on a quantile sampling distribution.  
+
+Even though the quantile distributions lack the closed-form CDF $F(y)=u$, in most cases, the depths $u$ can be approximated by numerically inverting the $Q(u)$. We denote the numerically inverted quantile function as $\widehat{Q^{-1}}(y)$ or $\widehat{F}(y)$.  We propose to denote quantile distributions as $u \overset{y}{\backsim} \text{Distribution}(\delta)$, where the *back-tilde symbol* with the variable name overscript $\overset{y}{\backsim}$ should be read "inversely distributed as" to indicate that the *depth* $u$ is fully determined given the value of the random variable $Y$ and the parameterized inverse distribution function indicated to the right of the *back-tilde* symbol.
+
+In this paper, we summarize the quantile function substitutions proposed by @nair2020BayesianInferenceQuantile and implemented by @rayner2002NumericalMaximumLikelihood introducing the terms *quantile-based* prior and *quantile-based* likelihood and show the equivalence of the two ways of expressing the likelihood in Bayesian models. We then illustrate the application of the *quantile-based inference* the to univariate and regression models and provide code examples for models based on the quantile sampling distributions in Stan [@gabry2022CmdstanrInterfaceCmdStan] and in R [@rcoreteam2021LanguageEnvironmentStatistical]. For the univariate model, we update the parameters of a bathtub-shaped Govindarajulu distribution and for the regression model, we pick the flattened skew-logistic distribution to model the error term.
+
+The *traditional* approach to quantile regression introduced by @koenker2005QuantileRegression is, in essence, semi-parametric, because it does not require the user "to specify the distribution of the error term as it is allowed to take any form" [@yu2001BayesianQuantileRegression]. The approach we are taking is in essence the Bayesian version of the *parametric quantile regression* (PQR), because in this type of regression the distribution of the error term is modeled explicitly [@gilchrist2008RegressionRevisited; @sharma2020QuantileBasedApproachSupervised; @su2015FlexibleParametricQuantile; @dean2009VersatileRegressionSimple; @muraleedharan2016RegressionQuantileModels; @perri2007PartiallyAdaptiveEstimation; @perri2008DistributionalLeastSquares]. Since in the PQR the regression equation is expressed in terms of the depth $u$ we can extract the coherent (non-crossing) quantile regression lines for any set of fractiles. 
+
+The *quantile-based inference* opens up a wide set of new distributions to serve as likelihood and/or prior in Bayesian models. Besides, the flexibility offered by the distributions defined in terms of the quantile function [@gilchrist2007ModelingFittingQuantile], and in particular their easily extensible nature using Gilchrist's QF transformation rules, allows ultimate freedom in expressing the expert-informed priors. 
+
+Embracing and expanding the use of quantile distributions in Bayesian analysis can enable new solutions for old problems and enrich the toolkit available to scientists for performing hard inference tasks. We hope that the *quantile-based inference* methods presented in this paper can contribute to expanding the body of knowledge about the use of quantile functions in Bayesian statistics and fuel further research in the area of quantile distributions.
+
+## Hybrid elicitation and quantile-parameterized likelihood
+
+Prior distribution is an expression of expert's understanding of the properties of the data-generative process at hand and their translation of this understanding into the language of a particular statistical model. The assumptions behind the direct, *structural* approach to elicitation are that the *domain expert* and the *statistician* are fully aligned on the mathematical model which can be used to represent the data-generative process, and that the *domain expert* has sufficient statistical expertise to translate their belief into the distribution of the parameters in such model [@winkler1980PriorInformationPredictive]. In case non-informative priors are used, the *statistician* acts as a clueless expert, having no relevant information about the prior distribution of the model parameters. Thus, prior specification is a subset of the expert knowledge elicitation in the absence of prior knowledge [@mikkola2021PriorKnowledgeElicitation]. 
+
+The alternative, *predictive* approach to specifying priors focuses on eliciting the (conditional) predictions from a **domain expert** and then using them to *infer* the distribution of the parameters for the suitable model [@winkler1980PriorInformationPredictive; @kadane1980PredictiveStructuralMethods; @kadane1998ExperiencesElicitation; @akbarov2009ProbabilityElicitationPredictive; @hartmann2020FlexiblePriorElicitation; @mikkola2021PriorKnowledgeElicitation].
+
+We present an example of the expert-elicited foods consumption distribution used for exposure assessment, and update it with the observations of actual consumption obtained from the food consumption database. We extracted the summary statistics from the EFSA food consumption database for the food category level 5 with few data points. We elicited the distribution of food consumption for this category using a set of quantiles, along with the expert uncertainty about the quantiles, which gets encoded into a Dirichlet distribution.
+We adopt the approach described by [@elfadaly2013ElicitingDirichletConnor] for assessing the hyperparameter vector of a Dirichlet distribution using the conditional univariate beta distributions. In this method the expert assesses the quartiles of the probability for each category using the symmetric percentile triplet elicitation. The resulting Dirichlet distribution can be used as a prior for the model parametrized by quantiles.
+Quantile-parameterized distributions (QPDs) are parameterized by a set of quantile-probability pairs (quantile-probability tuple, QPT) describing an observable [@keelin2011QuantileParameterizedDistributions]. Uncertainty about the quantiles was updated using Bayesian inference [@nair2020BayesianInferenceQuantile; @perepolkin2021TenetsQuantilebasedInference; @rayner2002NumericalMaximumLikelihood]. 
+Estimates of consumption by a median and a high consumer were extracted from the posterior food consumption distribution together with uncertainty in these estimates, which can be used in exposure assessment.
+
+The hybrid elicitation consists of two phases: elicitation of the quantile values $q$ and elicitation of uncertainty in the cumulative probabilities associated with them (i.e. possible vectors of $p$ which could correspond to the specified vector $q$). 
+The primary goal of eliciting the vector $q$ is to "position" the prior on the data ($x$) scale and provide a reasonable baseline for the follow up elicitation. In fact, the hyperparameter vector $q$ specifies the location of the QDirichlet prior, while the hyperparameter vector $α$ is responsible for defining its shape.
+
+```{r model-graph, out.width="80%", echo=FALSE, fig.align='center'}
+knitr::include_graphics("img/model-graph.png")
+```
+
+
+Our approach to constructing a prior distribution for the simplex Δ is similar to the method adopted by [@burkner2020ModellingMonotonicEffects] for modeling the monotonic effects in ordinal regression. The parameter vector of Dirichlet distribution combined with the vector of elicited quantiles act as hyper-parameters of the proposed QDirichlet prior, which describes the uncertainty in the parameters of the quantile-parameterized model (Figure \@ref(fig:model-graph)).
+
+In Figure \@ref(fig:model-graph) the prior is represented by the Dirichlet distribution with hyperparameter α specifying the uncertainty in the cumulative probabilities and a vector q representing the quantile values corresponding to the sampled cumulative probabilities. The indirect likelihood is represented by the metalog distribution which relies on depths ui given the parameterizing QPT $\{p,q\}_n$. The depths $u$ can be estimated using the numerical inverse of the metalog quantile function
+
+Asking experts to provide their uncertainty about the elicited QPT is enough to quantify the uncertainty about the food consumption distribution. This approach is particularly useful when food consumption data is sparse.
+Parametric elicitation aims to describe epistemic uncertainty contained in the parameters of the model with the help of the experts. Predictive elicitation describes the uncertainty in the next observation without distinguishing between the randomness in the model and the lack of knowledge about the model parameters. Hybrid elicitation starts by describing the next observation using a QPT, but then pivots to characterization of uncertainty contained in the assessment of the QPT itself. This is accomplished by describing a hypothetical sample from the target population, which corresponds to cumulative probabilities. These probabilities, along with a set of quantile values, can serve as parameters in the quantile-parameterized model. 
+Hybrid elicitation, like predictive elicitation, describes only observable quantities. At the same time, like parametric elicitation, the hybrid elicitation results in the characterization of uncertainty in the model parameters. Hybrid elicitation, therefore, can be viewed as observations-level parametric elicitation for quantile-parameterized models.
+
+# Going forward
+
+## Expert-informed adjustments to species distribution models using presence-only data
+
+Species distribution models are often used in ecology and environmental science. However, the most widely available data to inform these models are presence-only observations collated by the volunteers into the species occurrence databases, such as [GBIF](https://www.gbif.org/). The non-random sampling nature of the presence-only data makes it impossible to estimate the species prevalence from it, without making some critical simplifying adjustments. We use the expert-elicited species absence distribution to complement the presence-only data for unbiased estimation of prevalence.
+
+We will use expert knowledge elicitation to inform Bayesian hierarchical spatially-referenced model in order to supplement the presence-only data with expert-informed judgments to produce unbiased estimates of species distribution.
+
+# Conclusion
+
+Using expert judgment in ecological modeling can solve some of the problems related to measurement protocols in species distribution modeling. This PhD project develops new tools for expert elicitation and incorporates the improved elicitation protocol into scientific inquiry in order to inform policy and decision making in waterfowl management.
+
