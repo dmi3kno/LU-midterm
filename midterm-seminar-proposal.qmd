@@ -26,7 +26,7 @@ citation:
   #abstract-url: https://dmi3kno.github.io/LU-midterm/midterm-seminar-proposal.html
 keywords: bayesian inference, quantile functions
 #google-scholar: true
-bibliography: "`r rbbt::bbt_write_bib('midterm-seminar-proposal.bib', overwrite = TRUE)`"
+bibliography: "`r rbbt::bbt_write_bib('midterm-seminar-proposal.bib', ignore=c('fig-moebius', 'fig-modelgraph'),overwrite = TRUE)`"
 ---
 
 # Introduction
@@ -67,12 +67,17 @@ Most of the knowledge and methods for Bayesian inference have been developed for
 
 The paper "The tenets of quantile-based inference in Bayesian models" builds on the ideas of @gilchrist2000StatisticalModellingQuantile, @rayner2002NumericalMaximumLikelihood, @nair2020BayesianInferenceQuantile and systematically presents and illustrates the Bayesian inference using quantile functions. We apply the principles of *quantile-based inference* to Bayesian updating of parameters in the univariate and regression settings using the flexible and extensible quantile sampling distributions.
 
-```{r moebius-chart, fig.cap="Moebius strip of probability functions.", fig.align='center', out.width="50%", echo=FALSE}
+```{r}
+#| label: fig-moebius
+#| fig-cap: "Moebius strip of probability functions."
+#| out-width: 50%
+#| echo: false
 rsvg::rsvg_png("img/moebius-loop.svg", "img/moebius-loop.png", width=600, height = 600)
 knitr::include_graphics("img/moebius-loop.png", dpi=200)
 ```
 
-First, we briefly review the different ways of specifying a probability distribution (Figure \@ref(fig:moebius-chart)) and discuss several examples of the distributions defined by a quantile function, found in the literature. In the paper, we rely on the density quantile function (DQF) $[q(u)]^{-1}$, i.e. the density of a random variable expressed in terms of the cumulative distribution function [@perri2007PartiallyAdaptiveEstimation], to define the likelihood in a Bayesian model based on a quantile sampling distribution.  
+First, we briefly review the different ways of specifying a probability distribution 
+@fig-moebius and discuss several examples of the distributions defined by a quantile function, found in the literature. In the paper, we rely on the density quantile function (DQF) $[q(u)]^{-1}$, i.e. the density of a random variable expressed in terms of the cumulative distribution function [@perri2007PartiallyAdaptiveEstimation], to define the likelihood in a Bayesian model based on a quantile sampling distribution.  
 
 Even though the quantile distributions lack the closed-form CDF $F(y)=u$, in most cases, the depths $u$ can be approximated by numerically inverting the $Q(u)$. We denote the numerically inverted quantile function as $\widehat{Q^{-1}}(y)$ or $\widehat{F}(y)$.  We propose to denote quantile distributions as $u \overset{y}{\backsim} \text{Distribution}(\delta)$, where the *back-tilde symbol* with the variable name overscript $\overset{y}{\backsim}$ should be read "inversely distributed as" to indicate that the *depth* $u$ is fully determined given the value of the random variable $Y$ and the parameterized inverse distribution function indicated to the right of the *back-tilde* symbol.
 
@@ -98,14 +103,19 @@ Estimates of consumption by a median and a high consumer were extracted from the
 The hybrid elicitation consists of two phases: elicitation of the quantile values $q$ and elicitation of uncertainty in the cumulative probabilities associated with them (i.e. possible vectors of $p$ which could correspond to the specified vector $q$). 
 The primary goal of eliciting the vector $q$ is to "position" the prior on the data ($x$) scale and provide a reasonable baseline for the follow up elicitation. In fact, the hyperparameter vector $q$ specifies the location of the QDirichlet prior, while the hyperparameter vector $α$ is responsible for defining its shape.
 
-```{r model-graph, out.width="80%", echo=FALSE, fig.align='center'}
+```{r}
+#| label: fig-modelgraph
+#| fig-cap: "Moebius strip of probability functions."
+#| fig-align: center
+#| out-width: 80%
+#| echo: false
 knitr::include_graphics("img/model-graph.png")
 ```
 
 
-Our approach to constructing a prior distribution for the simplex Δ is similar to the method adopted by [@burkner2020ModellingMonotonicEffects] for modeling the monotonic effects in ordinal regression. The parameter vector of Dirichlet distribution combined with the vector of elicited quantiles act as hyper-parameters of the proposed QDirichlet prior, which describes the uncertainty in the parameters of the quantile-parameterized model (Figure \@ref(fig:model-graph)).
+Our approach to constructing a prior distribution for the simplex Δ is similar to the method adopted by [@burkner2020ModellingMonotonicEffects] for modeling the monotonic effects in ordinal regression. The parameter vector of Dirichlet distribution combined with the vector of elicited quantiles act as hyper-parameters of the proposed QDirichlet prior, which describes the uncertainty in the parameters of the quantile-parameterized model (Figure @fig-modelgraph).
 
-In Figure \@ref(fig:model-graph) the prior is represented by the Dirichlet distribution with hyperparameter α specifying the uncertainty in the cumulative probabilities and a vector q representing the quantile values corresponding to the sampled cumulative probabilities. The indirect likelihood is represented by the metalog distribution which relies on depths ui given the parameterizing QPT $\{p,q\}_n$. The depths $u$ can be estimated using the numerical inverse of the metalog quantile function
+In Figure @fig-modelgraph the prior is represented by the Dirichlet distribution with hyperparameter α specifying the uncertainty in the cumulative probabilities and a vector q representing the quantile values corresponding to the sampled cumulative probabilities. The indirect likelihood is represented by the metalog distribution which relies on depths ui given the parameterizing QPT $\{p,q\}_n$. The depths $u$ can be estimated using the numerical inverse of the metalog quantile function
 
 Asking experts to provide their uncertainty about the elicited QPT is enough to quantify the uncertainty about the food consumption distribution. This approach is particularly useful when food consumption data is sparse.
 Parametric elicitation aims to describe epistemic uncertainty contained in the parameters of the model with the help of the experts. Predictive elicitation describes the uncertainty in the next observation without distinguishing between the randomness in the model and the lack of knowledge about the model parameters. Hybrid elicitation starts by describing the next observation using a QPT, but then pivots to characterization of uncertainty contained in the assessment of the QPT itself. This is accomplished by describing a hypothetical sample from the target population, which corresponds to cumulative probabilities. These probabilities, along with a set of quantile values, can serve as parameters in the quantile-parameterized model. 

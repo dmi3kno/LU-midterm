@@ -6,6 +6,6 @@
 
 This repository contains the miterm report
 
-Proposal: [link](https://dmi3kno.github.io/LU-midterm/midterm-seminar-proposal.html)
-Slides: [link]()
+- Proposal: [link](https://dmi3kno.github.io/LU-midterm/midterm-seminar-proposal.html)
+- Slides: [link]()
 
