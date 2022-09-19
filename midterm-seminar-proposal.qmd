@@ -31,18 +31,13 @@ bibliography: "`r rbbt::bbt_write_bib('midterm-seminar-proposal.bib', ignore=c('
 
 # Introduction
 
-The objective of science is learning from evidence. This is often interpreted as the science taking the "data-driven approach", succinctly expressed by W. Edwards Deming:
+The objective of science is learning from evidence. This is often interpreted as the science taking the "data-driven approach". However, even in the midst of "big data tsunami" the data alone may not be enough for making valid inferences about the world [@spiegelhalter2004IncorporatingBayesianIdeas]. Inferences from data happen in the context of our understanding of the world drawn from the past experiences [@jaynes2003ProbabilityTheoryLogic].
 
-> In God we trust. All others must bring data.
+Bayesian statistics have long advocated that instead of making implicit assumptions, the prior knowledge must be made explicit and assured to be relevant [@clayton2021BernoulliFallacyStatistical]. The prior knowledge is embedded in the context of scientific models, which describe causal relationships representing our understanding of how the world works. The causal models (encoded through DAGs) provide the rationale for including or omitting variables or factors in the analysis [@mcelreath2020StatisticalRethinkingBayesian; @pearl2018BookWhyNew; @cinelli2020CrashCourseGood].
 
-However, even in the midst of "big data tsunami" the scientific voices emerge arguing that, the data alone may not be enough for making valid inferences about the world [@spiegelhalter2004IncorporatingBayesianIdeas]. Inferences from data happen in the context of our understanding of the world drawn from the past experiences.
+Expert knowledge elicitation (EKE) is an interdisciplinary field connecting the insights from cognitive science, psychology, statistics and computation to encode and use the judgments extracted from expert as the scientific basis for policy [@ohagan2019ExpertKnowledgeElicitation]. EKE is especially needed in the areas where the data is sparse, monitoring is expensive and/or the systems are complex. These characteristics are often found in the environmental management problems [@gregory2012StructuredDecisionMaking]. My PhD work is contributing to developing new tools for extracting the knowledge from experts and employing it in environmental models for better conservation decisions.
 
-Bayesian statistics have long advocated that instead of making implicit assumptions, the prior knowledge must be made explicit and assured to be relevant [@clayton2021BernoulliFallacyStatistical]. Bayesian statistics has risen to prominence in the recent decades, because some of the hard problems in science and policy are not being answered by the frequentist approach to data analysis [@acree2021MythStatisticalInference]. The prior knowledge is embedded in the context of scientific models, which describe causal relationships representing our understanding of how the world works. Therefore, the causal models need to be made explicit through DAGs which provide the rationale for including (or omitting) variables or factors in the analysis [@mcelreath2020StatisticalRethinkingBayesian; @pearl2018BookWhyNew; @cinelli2020CrashCourseGood].
-
-The purpose of my PhD is to aid these two aims: 
-
-1) research more effective ways of capturing the experts' prior knowledge in the form of subjective probability distributions
-2) apply these techniques to inform environmental decisions through causal models
+I propose new types of distributions for encoding expert judgments. Then I develop new types of models which are able to capture uncertainty in the quantile-probability pairs provided by the experts. Finally, I apply these insights to complement the presence-only data from the national (e.g. Artportalen in Sweden and Norway) and global (e.g. GBIF) species observation databases to inform the Species Distribution Models. 
 
 # Progress
 ## Quantile-parameterized priors and posterior passing

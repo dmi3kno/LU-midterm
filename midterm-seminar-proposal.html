@@ -111,17 +111,10 @@ div.csl-indent {
 
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
-<p>The objective of science is learning from evidence. This is often interpreted as the science taking the “data-driven approach”, succinctly expressed by W. Edwards Deming:</p>
-<blockquote class="blockquote">
-<p>In God we trust. All others must bring data.</p>
-</blockquote>
-<p>However, even in the midst of “big data tsunami” the scientific voices emerge arguing that, the data alone may not be enough for making valid inferences about the world <span class="citation" data-cites="spiegelhalter2004IncorporatingBayesianIdeas">(<a href="#ref-spiegelhalter2004IncorporatingBayesianIdeas" role="doc-biblioref">Spiegelhalter 2004</a>)</span>. Inferences from data happen in the context of our understanding of the world drawn from the past experiences.</p>
-<p>Bayesian statistics have long advocated that instead of making implicit assumptions, the prior knowledge must be made explicit and assured to be relevant <span class="citation" data-cites="clayton2021BernoulliFallacyStatistical">(<a href="#ref-clayton2021BernoulliFallacyStatistical" role="doc-biblioref">Clayton 2021</a>)</span>. Bayesian statistics has risen to prominence in the recent decades, because some of the hard problems in science and policy are not being answered by the frequentist approach to data analysis <span class="citation" data-cites="acree2021MythStatisticalInference">(<a href="#ref-acree2021MythStatisticalInference" role="doc-biblioref">Acree 2021</a>)</span>. The prior knowledge is embedded in the context of scientific models, which describe causal relationships representing our understanding of how the world works. Therefore, the causal models need to be made explicit through DAGs which provide the rationale for including (or omitting) variables or factors in the analysis <span class="citation" data-cites="mcelreath2020StatisticalRethinkingBayesian pearl2018BookWhyNew cinelli2020CrashCourseGood">(<a href="#ref-mcelreath2020StatisticalRethinkingBayesian" role="doc-biblioref">McElreath 2020</a>; <a href="#ref-pearl2018BookWhyNew" role="doc-biblioref">Pearl and Mackenzie 2018</a>; <a href="#ref-cinelli2020CrashCourseGood" role="doc-biblioref">Cinelli, Forney, and Pearl 2020</a>)</span>.</p>
-<p>The purpose of my PhD is to aid these two aims:</p>
-<ol type="1">
-<li>research more effective ways of capturing the experts’ prior knowledge in the form of subjective probability distributions</li>
-<li>apply these techniques to inform environmental decisions through causal models</li>
-</ol>
+<p>The objective of science is learning from evidence. This is often interpreted as the science taking the “data-driven approach”. However, even in the midst of “big data tsunami” the data alone may not be enough for making valid inferences about the world <span class="citation" data-cites="spiegelhalter2004IncorporatingBayesianIdeas">(<a href="#ref-spiegelhalter2004IncorporatingBayesianIdeas" role="doc-biblioref">Spiegelhalter 2004</a>)</span>. Inferences from data happen in the context of our understanding of the world drawn from the past experiences <span class="citation" data-cites="jaynes2003ProbabilityTheoryLogic">(<a href="#ref-jaynes2003ProbabilityTheoryLogic" role="doc-biblioref">Jaynes 2003</a>)</span>.</p>
+<p>Bayesian statistics have long advocated that instead of making implicit assumptions, the prior knowledge must be made explicit and assured to be relevant <span class="citation" data-cites="clayton2021BernoulliFallacyStatistical">(<a href="#ref-clayton2021BernoulliFallacyStatistical" role="doc-biblioref">Clayton 2021</a>)</span>. The prior knowledge is embedded in the context of scientific models, which describe causal relationships representing our understanding of how the world works. The causal models (encoded through DAGs) provide the rationale for including or omitting variables or factors in the analysis <span class="citation" data-cites="mcelreath2020StatisticalRethinkingBayesian pearl2018BookWhyNew cinelli2020CrashCourseGood">(<a href="#ref-mcelreath2020StatisticalRethinkingBayesian" role="doc-biblioref">McElreath 2020</a>; <a href="#ref-pearl2018BookWhyNew" role="doc-biblioref">Pearl and Mackenzie 2018</a>; <a href="#ref-cinelli2020CrashCourseGood" role="doc-biblioref">Cinelli, Forney, and Pearl 2020</a>)</span>.</p>
+<p>Expert knowledge elicitation (EKE) is an interdisciplinary field connecting the insights from cognitive science, psychology, statistics and computation to encode and use the judgments extracted from expert as the scientific basis for policy <span class="citation" data-cites="ohagan2019ExpertKnowledgeElicitation">(<a href="#ref-ohagan2019ExpertKnowledgeElicitation" role="doc-biblioref">O’Hagan 2019</a>)</span>. EKE is especially needed in the areas where the data is sparse, monitoring is expensive and/or the systems are complex. These characteristics are often found in the environmental management problems <span class="citation" data-cites="gregory2012StructuredDecisionMaking">(<a href="#ref-gregory2012StructuredDecisionMaking" role="doc-biblioref">Gregory 2012</a>)</span>. My PhD work is contributing to developing new tools for extracting the knowledge from experts and employing it in environmental models for better conservation decisions.</p>
+<p>I propose new types of distributions for encoding expert judgments. Then I develop new types of models which are able to capture uncertainty in the quantile-probability pairs provided by the experts. Finally, I apply these insights to complement the presence-only data from the national (e.g.&nbsp;Artportalen in Sweden and Norway) and global (e.g.&nbsp;GBIF) species observation databases to inform the Species Distribution Models.</p>
 </section>
 <section id="progress" class="level1">
 <h1>Progress</h1>
@@ -191,9 +184,6 @@ div.csl-indent {
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
-<div id="ref-acree2021MythStatisticalInference" class="csl-entry" role="doc-biblioentry">
-Acree, Michael C. 2021. <em>The Myth of Statistical Inference</em>. Cham: Springer International Publishing. <a href="https://doi.org/10.1007/978-3-030-73257-8">https://doi.org/10.1007/978-3-030-73257-8</a>.
-</div>
 <div id="ref-akbarov2009ProbabilityElicitationPredictive" class="csl-entry" role="doc-biblioentry">
 Akbarov, A. 2009. <span>“Probability Elicitation: Predictive Approach.”</span> PhD thesis, University of Salford. <a href="http://usir.salford.ac.uk/id/eprint/26502/?template=banner">http://usir.salford.ac.uk/id/eprint/26502/?template=banner</a>.
 </div>
@@ -230,11 +220,17 @@ Gilchrist, Warren. 2000. <em>Statistical Modelling with Quantile Functions</em>.
 <div id="ref-gilchrist2007ModelingFittingQuantile" class="csl-entry" role="doc-biblioentry">
 Gilchrist, Warren G. 2007. <span>“Modeling and Fitting Quantile Distributions and Regressions.”</span> <em>American Journal of Mathematical and Management Sciences</em> 27 (3-4): 401–39. <a href="https://doi.org/gjqt4f">https://doi.org/gjqt4f</a>.
 </div>
+<div id="ref-gregory2012StructuredDecisionMaking" class="csl-entry" role="doc-biblioentry">
+Gregory, Robin, ed. 2012. <em>Structured Decision Making: A Practical Guide to Environmental Management Choices</em>. Chichester, West Sussex ; Hoboken, N.J: Wiley-Blackwell.
+</div>
 <div id="ref-hartmann2020FlexiblePriorElicitation" class="csl-entry" role="doc-biblioentry">
 Hartmann, Marcelo, Georgi Agiashvili, Paul Bürkner, and Arto Klami. 2020. <span>“Flexible Prior Elicitation via the Prior Predictive Distribution.”</span> <a href="http://arxiv.org/abs/2002.09868">http://arxiv.org/abs/2002.09868</a>.
 </div>
 <div id="ref-haynes2005BayesianEstimationGandk" class="csl-entry" role="doc-biblioentry">
 Haynes, Michele, and Kerrie Mengersen. 2005. <span>“Bayesian Estimation of g-and-k Distributions Using MCMC.”</span> <em>Computational Statistics</em> 20 (1): 7–30. <a href="https://doi.org/dpgjv5">https://doi.org/dpgjv5</a>.
+</div>
+<div id="ref-jaynes2003ProbabilityTheoryLogic" class="csl-entry" role="doc-biblioentry">
+Jaynes, E. T. 2003. <em>Probability Theory: The Logic of Science</em>. Edited by G. Larry Bretthorst. 1st ed. Cambridge University Press. <a href="https://doi.org/10.1017/CBO9780511790423">https://doi.org/10.1017/CBO9780511790423</a>.
 </div>
 <div id="ref-kadane1980PredictiveStructuralMethods" class="csl-entry" role="doc-biblioentry">
 Kadane, Joseph B. 1980. <span>“Predictive and Structural Methods for Eliciting Prior Distributions.”</span> <em>Bayesian Analysis in Econometrics and Statistics</em> 18.
