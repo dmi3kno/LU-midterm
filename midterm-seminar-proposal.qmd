@@ -26,14 +26,14 @@ citation:
   #abstract-url: https://dmi3kno.github.io/LU-midterm/midterm-seminar-proposal.html
 keywords: bayesian inference, quantile functions
 #google-scholar: true
-bibliography: "`r rbbt::bbt_write_bib('midterm-seminar-proposal.bib', ignore=c('fig-moebius', 'fig-modelgraph'),overwrite = TRUE)`"
+bibliography: "`r rbbt::bbt_write_bib('midterm-seminar-proposal.bib', ignore=c('fig-moebius', 'fig-modelgraph', 'fig-shelf', 'fig-shelf-pdf', 'fig-shelf-cdf', 'fig-qpds'),overwrite = TRUE)`"
 ---
 
 # Introduction
 
 The objective of science is learning from evidence. This is often interpreted as the science taking the "data-driven approach". However, even in the midst of "big data tsunami" the data alone may not be enough for making valid inferences about the world [@spiegelhalter2004IncorporatingBayesianIdeas]. Inferences from data happen in the context of our understanding of the world drawn from the past experiences [@jaynes2003ProbabilityTheoryLogic].
 
-Bayesian statistics have long advocated that instead of making implicit assumptions, the prior knowledge must be made explicit and assured to be relevant [@clayton2021BernoulliFallacyStatistical]. The prior knowledge is embedded in the context of scientific models, which describe causal relationships representing our understanding of how the world works. The causal models (encoded through DAGs) provide the rationale for including or omitting variables or factors in the analysis [@mcelreath2020StatisticalRethinkingBayesian; @pearl2018BookWhyNew; @cinelli2020CrashCourseGood].
+Bayesian statistics have long advocated that instead of making implicit assumptions, the prior knowledge must be made explicit and assured to be relevant [@clayton2021BernoulliFallacyStatistical]. The prior knowledge is embedded in the context of scientific models, which describe causal relationships representing our understanding of how the world works [@spiegelhalter2014FutureLiesUncertainty]. The causal models (encoded through DAGs) provide the rationale for including or omitting variables or factors in the analysis [@mcelreath2020StatisticalRethinkingBayesian; @pearl2018BookWhyNew; @cinelli2020CrashCourseGood].
 
 Expert knowledge elicitation (EKE) is an interdisciplinary field connecting the insights from cognitive science, psychology, statistics and computation to encode and use the judgments extracted from expert as the scientific basis for policy [@ohagan2019ExpertKnowledgeElicitation]. EKE is especially needed in the areas where the data is sparse, monitoring is expensive and/or the systems are complex. These characteristics are often found in the environmental management problems [@gregory2012StructuredDecisionMaking]. My PhD work is contributing to developing new tools for extracting the knowledge from experts and employing it in environmental models for better conservation decisions.
 
@@ -45,7 +45,19 @@ I propose new types of distributions for encoding expert judgments. Then I devel
 Bayesian inference is about updating prior beliefs in light of new evidence. 
 The beliefs are an expression of the state of knowledge (or ignorance) of an expert in the context of a model. 
 
-The elicitation of continuous distributions for the quantity of interest often consists of eliciting a number of quantile-probability pairs (QPPs) and fitting a distribution to them [@ohagan2019ExpertKnowledgeElicitation; @kadane1998ExperiencesElicitation]. The distribution is selected from the predefined set of "simple and convenient" distributions with a suitable boundedness accounting for the nature of the elicited quantity [@ohagan2006UncertainJudgementsEliciting]. The quantile-parameterized distributions (QPDs) represent an alternative route for selecting a distribution to characterize predictions or parameters. Because these distributions are parameterized by the QPPs, the elicited values can be used for defining the distribution directly, guaranteeing the fit and interpretability of the parameters. 
+The elicitation of continuous distributions for the quantity of interest often consists of eliciting a number of quantile-probability pairs (QPPs) and fitting a distribution to them [@ohagan2019ExpertKnowledgeElicitation; @kadane1998ExperiencesElicitation]. The distribution is selected from the predefined set of "simple and convenient" distributions with a suitable boundedness accounting for the nature of the elicited quantity [@ohagan2006UncertainJudgementsEliciting]. @fig-shelf shows the example of fitting the parametric distribution to the quantiles using the SHELF package in R [@gosling2018SHELFSheffieldElicitation]. The QPPs were extracted from the EFSA Food Consumption database for the chronic consumption of bitter chocolate for elderly category assessed by the 2010-2011 Swedish National Dietary Survey.
+
+::: {#fig-shelf layout-ncol=2}
+![Fitted CDF](img/shelf-cdf.png){#fig-shelf-cdf}
+
+![Fitted CDF](img/shelf-pdf.png){#fig-shelf-pdf}
+
+Fitting parametric distribution with the SHELF software
+:::
+
+The quantile-parameterized distributions (QPDs) represent an alternative route for selecting a distribution to characterize predictions or parameters. Because these distributions are parameterized by the QPPs, the elicited values can be used for defining the distribution directly, guaranteeing the fit and interpretability of the parameters. @fig-qpds shows three QPDs fitted to the same QPPs from the EFSA database.
+
+![Fitting quantile-parameterized distributions](img/unnamed-chunk-1-1.png){#fig-qpds}
 
 In the forthcoming paper titled "Quantile-parameterized priors and posterior passing" we are looking at the variety of distributions parameterized by QPPs found in the literature (Myerson, J-QPD, SQN, Metalog) and proposing some new variants (Logit-Myerson, Sech-Myerson) to facilitate easier elicitation and updating. Distributions characterized by QPPs can be thought as the distribution approximations which can either interpolate the expert's epistemic quantile function or regularize empirical CDF to produce a closed-form distribution which is possible to update and sample from. In order for the interpolating function to go through every point exactly, the distribution needs to have enough parameters. Quantile-parameterized distributions (QPDs) achieve it because the elicited QPPs *are* the parameters, so these CDF-points are always honored exactly. 
 
@@ -100,7 +112,7 @@ The primary goal of eliciting the vector $q$ is to "position" the prior on the d
 
 ```{r}
 #| label: fig-modelgraph
-#| fig-cap: "Moebius strip of probability functions."
+#| fig-cap: "QDirichlet-Metalog model."
 #| fig-align: center
 #| out-width: 80%
 #| echo: false
