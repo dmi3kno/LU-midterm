@@ -171,10 +171,46 @@ div.csl-indent {
 </div>
 </div>
 </div>
-<p>First, we briefly review the different ways of specifying a probability distribution <a href="#fig-moebius">Figure&nbsp;3</a> and discuss several examples of the distributions defined by a quantile function, found in the literature. In the paper, we rely on the density quantile function (DQF) <span class="math inline">\([q(u)]^{-1}\)</span>, i.e.&nbsp;the density of a random variable expressed in terms of the cumulative distribution function <span class="citation" data-cites="perri2007PartiallyAdaptiveEstimation">(<a href="#ref-perri2007PartiallyAdaptiveEstimation" role="doc-biblioref">Perri and Tarsitano 2007</a>)</span>, to define the likelihood in a Bayesian model based on a quantile sampling distribution.</p>
+<p>First, we briefly review the different ways of specifying a probability distribution <a href="#fig-moebius">Figure&nbsp;3</a> and discuss several examples of the distributions defined by a quantile function, found in the literature. For example, <a href="#tbl-exp-math">Table&nbsp;1</a> presents the different probability functions for the Exponential distribution.</p>
+<div id="tbl-exp-math" class="anchored">
+<table class="table">
+<caption>Table 1: Probability functions for Exponential distribution</caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Formula</th>
+<th>Function</th>
+<th>Formula</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CDF</td>
+<td><span class="math inline">\(F(x)=1- e^{-\lambda x}\)</span></td>
+<td>QF</td>
+<td><span class="math inline">\(Q(u)=\frac{-\ln(1-u)}{\lambda}\)</span></td>
+</tr>
+<tr class="even">
+<td>PDF</td>
+<td><span class="math inline">\(f(x)=\lambda e^{-\lambda x}\)</span></td>
+<td>QDF</td>
+<td><span class="math inline">\(q(u)=\frac{1}{\lambda(1-u)}\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Because <span class="math inline">\(Q(u)=x\)</span> we can compute the density as <span class="math inline">\(f(x)=f(Q(u))\)</span>.</p>
+<p><span class="math display">\[f(Q(u))=\lambda \exp(-\lambda\frac{-\ln(1-u)}{\lambda})=\lambda\exp(\ln(1-u))=\lambda(1-u)\]</span></p>
+<p>which is exactly reciprocal to <span class="math inline">\(q(u)\)</span>, the derivative of the quantile function. In the paper, we rely on the density quantile function (DQF) <span class="math inline">\([q(u)]^{-1}\)</span>, i.e.&nbsp;the density of a random variable expressed in terms of the quantile function <span class="citation" data-cites="perri2007PartiallyAdaptiveEstimation">(<a href="#ref-perri2007PartiallyAdaptiveEstimation" role="doc-biblioref">Perri and Tarsitano 2007</a>)</span>, to define the likelihood in a Bayesian model based on a quantile sampling distribution.</p>
+<p>As visible in Table 1,</p>
 <p>Even though the quantile distributions lack the closed-form CDF <span class="math inline">\(F(y)=u\)</span>, in most cases, the depths <span class="math inline">\(u\)</span> can be approximated by numerically inverting the <span class="math inline">\(Q(u)\)</span>. We denote the numerically inverted quantile function as <span class="math inline">\(\widehat{Q^{-1}}(y)\)</span> or <span class="math inline">\(\widehat{F}(y)\)</span>. We propose to denote quantile distributions as <span class="math inline">\(u \overset{y}{\backsim} \text{Distribution}(\delta)\)</span>, where the <em>back-tilde symbol</em> with the variable name overscript <span class="math inline">\(\overset{y}{\backsim}\)</span> should be read “inversely distributed as” to indicate that the <em>depth</em> <span class="math inline">\(u\)</span> is fully determined given the value of the random variable <span class="math inline">\(Y\)</span> and the parameterized inverse distribution function indicated to the right of the <em>back-tilde</em> symbol.</p>
 <p>In this paper, we summarize the quantile function substitutions proposed by <span class="citation" data-cites="nair2020BayesianInferenceQuantile">Nair, Sankaran, and Dileepkumar (<a href="#ref-nair2020BayesianInferenceQuantile" role="doc-biblioref">2020</a>)</span> and implemented by <span class="citation" data-cites="rayner2002NumericalMaximumLikelihood">Rayner and MacGillivray (<a href="#ref-rayner2002NumericalMaximumLikelihood" role="doc-biblioref">2002</a>)</span> introducing the terms <em>quantile-based</em> prior and <em>quantile-based</em> likelihood and show the equivalence of the two ways of expressing the likelihood in Bayesian models. We then illustrate the application of the <em>quantile-based inference</em> the to univariate and regression models and provide code examples for models based on the quantile sampling distributions in Stan <span class="citation" data-cites="gabry2022CmdstanrInterfaceCmdStan">(<a href="#ref-gabry2022CmdstanrInterfaceCmdStan" role="doc-biblioref">Gabry and Češnovar 2022</a>)</span> and in R <span class="citation" data-cites="rcoreteam2021LanguageEnvironmentStatistical">(<a href="#ref-rcoreteam2021LanguageEnvironmentStatistical" role="doc-biblioref">R Core Team 2021</a>)</span>. For the univariate model, we update the parameters of a bathtub-shaped Govindarajulu distribution and for the regression model, we pick the flattened skew-logistic distribution to model the error term.</p>
-<p>The <em>traditional</em> approach to quantile regression introduced by <span class="citation" data-cites="koenker2005QuantileRegression">Koenker (<a href="#ref-koenker2005QuantileRegression" role="doc-biblioref">2005</a>)</span> is, in essence, semi-parametric, because it does not require the user “to specify the distribution of the error term as it is allowed to take any form” <span class="citation" data-cites="yu2001BayesianQuantileRegression">(<a href="#ref-yu2001BayesianQuantileRegression" role="doc-biblioref">Yu and Moyeed 2001</a>)</span>. The approach we are taking is in essence the Bayesian version of the <em>parametric quantile regression</em> (PQR), because in this type of regression the distribution of the error term is modeled explicitly <span class="citation" data-cites="gilchrist2008RegressionRevisited sharma2020QuantileBasedApproachSupervised su2015FlexibleParametricQuantile dean2009VersatileRegressionSimple muraleedharan2016RegressionQuantileModels perri2007PartiallyAdaptiveEstimation perri2008DistributionalLeastSquares">(<a href="#ref-gilchrist2008RegressionRevisited" role="doc-biblioref">W. Gilchrist 2008</a>; <a href="#ref-sharma2020QuantileBasedApproachSupervised" role="doc-biblioref">Sharma and Chakrabarty 2020</a>; <a href="#ref-su2015FlexibleParametricQuantile" role="doc-biblioref">Su 2015</a>; <a href="#ref-dean2009VersatileRegressionSimple" role="doc-biblioref">Dean and King 2009</a>; <a href="#ref-muraleedharan2016RegressionQuantileModels" role="doc-biblioref">Muraleedharan, Lucas, and Guedes Soares 2016</a>; <a href="#ref-perri2007PartiallyAdaptiveEstimation" role="doc-biblioref">Perri and Tarsitano 2007</a>; <a href="#ref-perri2008DistributionalLeastSquares" role="doc-biblioref">Perri and Tarsitano 2008</a>)</span>. Since in the PQR the regression equation is expressed in terms of the depth <span class="math inline">\(u\)</span> we can extract the coherent (non-crossing) quantile regression lines for any set of fractiles.</p>
 <p>The <em>quantile-based inference</em> opens up a wide set of new distributions to serve as likelihood and/or prior in Bayesian models. Besides, the flexibility offered by the distributions defined in terms of the quantile function <span class="citation" data-cites="gilchrist2007ModelingFittingQuantile">(<a href="#ref-gilchrist2007ModelingFittingQuantile" role="doc-biblioref">W. G. Gilchrist 2007</a>)</span>, and in particular their easily extensible nature using Gilchrist’s QF transformation rules, allows ultimate freedom in expressing the expert-informed priors.</p>
 <p>Embracing and expanding the use of quantile distributions in Bayesian analysis can enable new solutions for old problems and enrich the toolkit available to scientists for performing hard inference tasks. We hope that the <em>quantile-based inference</em> methods presented in this paper can contribute to expanding the body of knowledge about the use of quantile functions in Bayesian statistics and fuel further research in the area of quantile distributions.</p>
 </section>
@@ -232,9 +268,6 @@ Cinelli, Carlos, Andrew Forney, and Judea Pearl. 2020. <span>“A Crash Course i
 <div id="ref-clayton2021BernoulliFallacyStatistical" class="csl-entry" role="doc-biblioentry">
 Clayton, Aubrey. 2021. <em>Bernoulli’s Fallacy: Statistical Illogic and the Crisis of Modern Science</em>. New York: Columbia University Press.
 </div>
-<div id="ref-dean2009VersatileRegressionSimple" class="csl-entry" role="doc-biblioentry">
-Dean, Benjamin, and AR King. 2009. <span>“Versatile Regression: Simple Regression with a Non-Normal Error Distribution.”</span> In, 7–8.
-</div>
 <div id="ref-elfadaly2013ElicitingDirichletConnor" class="csl-entry" role="doc-biblioentry">
 Elfadaly, Fadlalla G., and Paul H. Garthwaite. 2013. <span>“Eliciting Dirichlet and Connor–Mosimann Prior Distributions for Multinomial Models.”</span> <em>TEST</em> 22 (4): 628–46. <a href="https://doi.org/10.1007/s11749-013-0336-4">https://doi.org/10.1007/s11749-013-0336-4</a>.
 </div>
@@ -243,9 +276,6 @@ Gabry, Jonah, and Rok Češnovar. 2022. <em>Cmdstanr: R Interface to ’CmdStan�
 </div>
 <div id="ref-gilchrist2000StatisticalModellingQuantile" class="csl-entry" role="doc-biblioentry">
 Gilchrist, Warren. 2000. <em>Statistical Modelling with Quantile Functions</em>. Boca Raton: Chapman &amp; Hall/CRC.
-</div>
-<div id="ref-gilchrist2008RegressionRevisited" class="csl-entry" role="doc-biblioentry">
-———. 2008. <span>“Regression Revisited.”</span> <em>International Statistical Review</em> 76 (3): 401–18. <a href="https://doi.org/10.1111/j.1751-5823.2008.00053.x">https://doi.org/10.1111/j.1751-5823.2008.00053.x</a>.
 </div>
 <div id="ref-gilchrist2007ModelingFittingQuantile" class="csl-entry" role="doc-biblioentry">
 Gilchrist, Warren G. 2007. <span>“Modeling and Fitting Quantile Distributions and Regressions.”</span> <em>American Journal of Mathematical and Management Sciences</em> 27 (3-4): 401–39. <a href="https://doi.org/gjqt4f">https://doi.org/gjqt4f</a>.
@@ -274,17 +304,11 @@ Kadane, Joseph, and Lara J. Wolfson. 1998. <span>“Experiences in Elicitation.�
 <div id="ref-keelin2011QuantileParameterizedDistributions" class="csl-entry" role="doc-biblioentry">
 Keelin, Thomas W., and Bradford W. Powley. 2011. <span>“Quantile-Parameterized Distributions.”</span> <em>Decision Analysis</em> 8 (3): 206–19. <a href="https://doi.org/10.1287/deca.1110.0213">https://doi.org/10.1287/deca.1110.0213</a>.
 </div>
-<div id="ref-koenker2005QuantileRegression" class="csl-entry" role="doc-biblioentry">
-Koenker, Roger. 2005. <em>Quantile Regression</em>. Econometric Society Monographs, no. 38. Cambridge ; New York: Cambridge University Press.
-</div>
 <div id="ref-mcelreath2020StatisticalRethinkingBayesian" class="csl-entry" role="doc-biblioentry">
 McElreath, Richard. 2020. <em>Statistical Rethinking: A Bayesian Course with Examples in r and Stan</em>. 2nd ed. New York, NY: Chapman; Hall/CRC. <a href="https://doi.org/10.1201/9780429029608">https://doi.org/10.1201/9780429029608</a>.
 </div>
 <div id="ref-mikkola2021PriorKnowledgeElicitation" class="csl-entry" role="doc-biblioentry">
 Mikkola, Petrus, Osvaldo A. Martin, Suyog Chandramouli, Marcelo Hartmann, Oriol Abril Pla, Owen Thomas, Henri Pesonen, et al. 2021. <span>“Prior Knowledge Elicitation: The Past, Present, and Future.”</span> <a href="http://arxiv.org/abs/2112.01380">http://arxiv.org/abs/2112.01380</a>.
-</div>
-<div id="ref-muraleedharan2016RegressionQuantileModels" class="csl-entry" role="doc-biblioentry">
-Muraleedharan, G., C. Lucas, and C. Guedes Soares. 2016. <span>“Regression Quantile Models for Estimating Trends in Extreme Significant Wave Heights.”</span> <em>Ocean Engineering</em> 118 (May): 204–15. <a href="https://doi.org/10.1016/j.oceaneng.2016.04.009">https://doi.org/10.1016/j.oceaneng.2016.04.009</a>.
 </div>
 <div id="ref-nair2020BayesianInferenceQuantile" class="csl-entry" role="doc-biblioentry">
 Nair, N. Unnikrishnan, P. G. Sankaran, and M. Dileepkumar. 2020. <span>“Bayesian Inference in Quantile Functions.”</span> <em>Communications in Statistics - Theory and Methods</em> 0 (0): 1–13. <a href="https://doi.org/ghkdr4">https://doi.org/ghkdr4</a>.
@@ -301,9 +325,6 @@ Pearl, Judea, and Dana Mackenzie. 2018. <em>The Book of Why: The New Science of 
 <div id="ref-perepolkin2021TenetsQuantilebasedInference" class="csl-entry" role="doc-biblioentry">
 Perepolkin, Dmytro, Benjamin Goodrich, and Ullrika Sahlin. 2021. <span>“The Tenets of Quantile-Based Inference in Bayesian Models.”</span> Preprint. https://osf.io/enzgs: Open Science Framework. <a href="https://doi.org/10.31219/osf.io/enzgs">https://doi.org/10.31219/osf.io/enzgs</a>.
 </div>
-<div id="ref-perri2008DistributionalLeastSquares" class="csl-entry" role="doc-biblioentry">
-Perri, Pier Francesco, and A Tarsitano. 2008. <span>“Distributional Least Squares Based on the Generalized Lambda Distribution.”</span> In, 400:341–48. Physica-Verlag, A Springer Company.
-</div>
 <div id="ref-perri2007PartiallyAdaptiveEstimation" class="csl-entry" role="doc-biblioentry">
 Perri, Pier Francesco, and Agostino Tarsitano. 2007. <span>“Partially Adaptive Estimation via Quantile Functions.”</span> <em>Communications in Statistics - Simulation and Computation</em> 36 (2): 277–96. <a href="https://doi.org/10.1080/03610910601158369">https://doi.org/10.1080/03610910601158369</a>.
 </div>
@@ -313,23 +334,14 @@ R Core Team. 2021. <em>R: A Language and Environment for Statistical Computing</
 <div id="ref-rayner2002NumericalMaximumLikelihood" class="csl-entry" role="doc-biblioentry">
 Rayner, G. D., and H. L. MacGillivray. 2002. <span>“Numerical Maximum Likelihood Estimation for the g-and-k and Generalized g-and-h Distributions.”</span> <em>Statistics and Computing</em> 12 (1): 57–75. <a href="https://doi.org/c27574">https://doi.org/c27574</a>.
 </div>
-<div id="ref-sharma2020QuantileBasedApproachSupervised" class="csl-entry" role="doc-biblioentry">
-Sharma, Dreamlee, and Tapan Kumar Chakrabarty. 2020. <span>“A Quantile-Based Approach to Supervised Learning.”</span> In <em>Applications of Machine Learning</em>, edited by Prashant Johri, Jitendra Kumar Verma, and Sudip Paul, 321–40. Algorithms for Intelligent Systems. Singapore: Springer Singapore. <a href="https://doi.org/10.1007/978-981-15-3357-0_21">https://doi.org/10.1007/978-981-15-3357-0_21</a>.
-</div>
 <div id="ref-spiegelhalter2014FutureLiesUncertainty" class="csl-entry" role="doc-biblioentry">
 Spiegelhalter, D. J. 2014. <span>“The Future Lies in Uncertainty.”</span> <em>Science</em> 345 (6194): 264–65. <a href="https://doi.org/10.1126/science.1251122">https://doi.org/10.1126/science.1251122</a>.
 </div>
 <div id="ref-spiegelhalter2004IncorporatingBayesianIdeas" class="csl-entry" role="doc-biblioentry">
 Spiegelhalter, David J. 2004. <span>“Incorporating Bayesian Ideas into Health-Care Evaluation.”</span> <em>Statistical Science</em> 19 (1): 156–74. <a href="https://doi.org/10.1214/088342304000000080">https://doi.org/10.1214/088342304000000080</a>.
 </div>
-<div id="ref-su2015FlexibleParametricQuantile" class="csl-entry" role="doc-biblioentry">
-Su, Steve. 2015. <span>“Flexible Parametric Quantile Regression Model.”</span> <em>Statistics and Computing</em> 25 (3): 635–50. <a href="https://doi.org/10.1007/s11222-014-9457-1">https://doi.org/10.1007/s11222-014-9457-1</a>.
-</div>
 <div id="ref-winkler1980PriorInformationPredictive" class="csl-entry" role="doc-biblioentry">
 Winkler, Robert L. 1980. <span>“Prior Information, Predictive Distributions, and Bayesian Model-Building.”</span> <em>Bayesian Analysis in Econometrics and Statistics. North-Holland Publishing Company</em>, 95–109.
-</div>
-<div id="ref-yu2001BayesianQuantileRegression" class="csl-entry" role="doc-biblioentry">
-Yu, Keming, and Rana A. Moyeed. 2001. <span>“Bayesian Quantile Regression.”</span> <em>Statistics &amp; Probability Letters</em> 54 (4): 437–47. <a href="https://doi.org/10.1016/S0167-7152(01)00124-9">https://doi.org/10.1016/S0167-7152(01)00124-9</a>.
 </div>
 </div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{perepolkin2022,
   author = {Dmytro Perepolkin},

@@ -26,7 +26,7 @@ citation:
   #abstract-url: https://dmi3kno.github.io/LU-midterm/midterm-seminar-proposal.html
 keywords: bayesian inference, quantile functions
 #google-scholar: true
-bibliography: "`r rbbt::bbt_write_bib('midterm-seminar-proposal.bib', ignore=c('fig-moebius', 'fig-modelgraph', 'fig-shelf', 'fig-shelf-pdf', 'fig-shelf-cdf', 'fig-qpds'),overwrite = TRUE)`"
+bibliography: "`r rbbt::bbt_write_bib('midterm-seminar-proposal.bib', ignore=c('fig-moebius', 'fig-modelgraph', 'fig-shelf', 'fig-shelf-pdf', 'fig-shelf-cdf', 'fig-qpds', 'tbl-exp-math'),overwrite = TRUE)`"
 ---
 
 # Introduction
@@ -84,13 +84,23 @@ knitr::include_graphics("img/moebius-loop.png", dpi=200)
 ```
 
 First, we briefly review the different ways of specifying a probability distribution 
-@fig-moebius and discuss several examples of the distributions defined by a quantile function, found in the literature. In the paper, we rely on the density quantile function (DQF) $[q(u)]^{-1}$, i.e. the density of a random variable expressed in terms of the cumulative distribution function [@perri2007PartiallyAdaptiveEstimation], to define the likelihood in a Bayesian model based on a quantile sampling distribution.  
+@fig-moebius and discuss several examples of the distributions defined by a quantile function, found in the literature. For example, @tbl-exp-math presents the different probability functions for the Exponential distribution. 
+
+
+| Function    | Formula     | Function    | Formula     |
+| ----------- | ----------- | ----------- | ----------- |
+| CDF   | $F(x)=1- e^{-\lambda x}$  | QF  | $Q(u)=\frac{-\ln(1-u)}{\lambda}$ |
+| PDF   | $f(x)=\lambda e^{-\lambda x}$ | QDF | $q(u)=\frac{1}{\lambda(1-u)}$       |
+
+: Probability functions for Exponential distribution {#tbl-exp-math}
+
+Because $Q(u)=x$ we can compute the density as $f(x)=f(Q(u))$. 
+$$f(Q(u))=\lambda \exp(-\lambda\frac{-\ln(1-u)}{\lambda})=\lambda\exp(\ln(1-u))=\lambda(1-u)$$
+which is exactly reciprocal to $q(u)$, the derivative of the quantile function. In the paper, we rely on the density quantile function (DQF) $[q(u)]^{-1}$, i.e. the density of a random variable expressed in terms of the quantile function [@perri2007PartiallyAdaptiveEstimation], to define the likelihood in a Bayesian model based on a quantile sampling distribution. 
 
 Even though the quantile distributions lack the closed-form CDF $F(y)=u$, in most cases, the depths $u$ can be approximated by numerically inverting the $Q(u)$. We denote the numerically inverted quantile function as $\widehat{Q^{-1}}(y)$ or $\widehat{F}(y)$.  We propose to denote quantile distributions as $u \overset{y}{\backsim} \text{Distribution}(\delta)$, where the *back-tilde symbol* with the variable name overscript $\overset{y}{\backsim}$ should be read "inversely distributed as" to indicate that the *depth* $u$ is fully determined given the value of the random variable $Y$ and the parameterized inverse distribution function indicated to the right of the *back-tilde* symbol.
 
 In this paper, we summarize the quantile function substitutions proposed by @nair2020BayesianInferenceQuantile and implemented by @rayner2002NumericalMaximumLikelihood introducing the terms *quantile-based* prior and *quantile-based* likelihood and show the equivalence of the two ways of expressing the likelihood in Bayesian models. We then illustrate the application of the *quantile-based inference* the to univariate and regression models and provide code examples for models based on the quantile sampling distributions in Stan [@gabry2022CmdstanrInterfaceCmdStan] and in R [@rcoreteam2021LanguageEnvironmentStatistical]. For the univariate model, we update the parameters of a bathtub-shaped Govindarajulu distribution and for the regression model, we pick the flattened skew-logistic distribution to model the error term.
-
-The *traditional* approach to quantile regression introduced by @koenker2005QuantileRegression is, in essence, semi-parametric, because it does not require the user "to specify the distribution of the error term as it is allowed to take any form" [@yu2001BayesianQuantileRegression]. The approach we are taking is in essence the Bayesian version of the *parametric quantile regression* (PQR), because in this type of regression the distribution of the error term is modeled explicitly [@gilchrist2008RegressionRevisited; @sharma2020QuantileBasedApproachSupervised; @su2015FlexibleParametricQuantile; @dean2009VersatileRegressionSimple; @muraleedharan2016RegressionQuantileModels; @perri2007PartiallyAdaptiveEstimation; @perri2008DistributionalLeastSquares]. Since in the PQR the regression equation is expressed in terms of the depth $u$ we can extract the coherent (non-crossing) quantile regression lines for any set of fractiles. 
 
 The *quantile-based inference* opens up a wide set of new distributions to serve as likelihood and/or prior in Bayesian models. Besides, the flexibility offered by the distributions defined in terms of the quantile function [@gilchrist2007ModelingFittingQuantile], and in particular their easily extensible nature using Gilchrist's QF transformation rules, allows ultimate freedom in expressing the expert-informed priors. 
 
